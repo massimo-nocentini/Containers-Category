@@ -7,6 +7,12 @@ Class {
 	#category : #'Collections-Unordered-Maybe'
 }
 
+{ #category : #comparing }
+Just >> = anObject [
+
+	^ super = anObject and: [ self content = anObject content ]
+]
+
 { #category : #accessing }
 Just >> content [
 	^ content
@@ -15,6 +21,12 @@ Just >> content [
 { #category : #accessing }
 Just >> content: anObject [
 	content := anObject
+]
+
+{ #category : #comparing }
+Just >> hash [
+
+	^ super hash bitXor: self content hash
 ]
 
 { #category : #'as yet unclassified' }
