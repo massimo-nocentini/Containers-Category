@@ -1,7 +1,7 @@
 Class {
 	#name : #CTCategoryMaybeNothing,
 	#superclass : #CTCategoryMaybe,
-	#category : #'Collections-Unordered-Maybe'
+	#category : #'Containers-Category'
 }
 
 { #category : #'as yet unclassified' }

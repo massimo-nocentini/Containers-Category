@@ -1,6 +1,6 @@
 Extension { #name : #Object }
 
-{ #category : #'*Collections-Unordered-Maybe' }
+{ #category : #'*Containers-Category' }
 Object >> just [
 
 	^ CTCategoryMaybeJust new
@@ -8,7 +8,7 @@ Object >> just [
 		  yourself
 ]
 
-{ #category : #'*Collections-Unordered-Maybe' }
+{ #category : #'*Containers-Category' }
 Object >> nothing [
 
 	^ CTCategoryMaybe nothing

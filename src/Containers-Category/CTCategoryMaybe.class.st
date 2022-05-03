@@ -4,7 +4,7 @@ Class {
 	#classVars : [
 		'Nothing'
 	],
-	#category : #'Collections-Unordered-Maybe'
+	#category : #'Containers-Category'
 }
 
 { #category : #'class initialization' }

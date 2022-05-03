@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'content'
 	],
-	#category : #'Collections-Unordered-Maybe'
+	#category : #'Containers-Category'
 }
 
 { #category : #comparing }
