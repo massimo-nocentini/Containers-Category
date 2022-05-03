@@ -1,6 +1,6 @@
 Class {
-	#name : #Just,
-	#superclass : #Maybe,
+	#name : #CTCategoryMaybeJust,
+	#superclass : #CTCategoryMaybe,
 	#instVars : [
 		'content'
 	],
@@ -8,34 +8,34 @@ Class {
 }
 
 { #category : #comparing }
-Just >> = anObject [
+CTCategoryMaybeJust >> = anObject [
 
 	^ super = anObject and: [ self content = anObject content ]
 ]
 
 { #category : #accessing }
-Just >> content [
+CTCategoryMaybeJust >> content [
 	^ content
 ]
 
 { #category : #accessing }
-Just >> content: anObject [
+CTCategoryMaybeJust >> content: anObject [
 	content := anObject
 ]
 
 { #category : #comparing }
-Just >> hash [
+CTCategoryMaybeJust >> hash [
 
 	^ super hash bitXor: self content hash
 ]
 
 { #category : #'as yet unclassified' }
-Just >> ifNothing: nBlock ifJust: jBlock [
+CTCategoryMaybeJust >> ifNothing: nBlock ifJust: jBlock [
 	^ jBlock value: self
 ]
 
 { #category : #printing }
-Just >> printOn: aStream [
+CTCategoryMaybeJust >> printOn: aStream [
 	super printOn: aStream.
 	aStream nextPut: $(.
 	content printOn: aStream.

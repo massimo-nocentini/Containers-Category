@@ -3,5 +3,13 @@ Extension { #name : #Object }
 { #category : #'*Collections-Unordered-Maybe' }
 Object >> just [
 
-	^ Maybe just: self
+	^ CTCategoryMaybeJust new
+		  content: self;
+		  yourself
+]
+
+{ #category : #'*Collections-Unordered-Maybe' }
+Object >> nothing [
+
+	^ CTCategoryMaybe nothing
 ]
