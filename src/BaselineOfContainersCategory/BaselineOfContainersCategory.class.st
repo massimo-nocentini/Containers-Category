@@ -10,5 +10,5 @@ BaselineOfContainersCategory >> baseline: spec [
 	<baseline>
 	spec for: #common do: [
 		spec
-		package: 'Collections-Unordered-Maybe' ]
+		package: 'Containers-Category' ]
 ]
