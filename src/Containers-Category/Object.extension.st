@@ -7,9 +7,3 @@ Object >> just [
 		  content: self;
 		  yourself
 ]
-
-{ #category : #'*Containers-Category' }
-Object >> nothing [
-
-	^ CTCategoryMaybe nothing
-]
