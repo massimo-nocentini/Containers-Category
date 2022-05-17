@@ -7,6 +7,12 @@ Class {
 	#category : #'Containers-Category'
 }
 
+{ #category : #'as yet unclassified' }
+CTCategoryMaybeJust >> <*> functorJust [
+
+	^ self fmap: functorJust content
+]
+
 { #category : #comparing }
 CTCategoryMaybeJust >> = anObject [
 

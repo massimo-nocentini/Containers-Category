@@ -1,8 +1,8 @@
 Class {
 	#name : #CTCategoryMaybe,
 	#superclass : #Object,
-	#traits : 'CTCategoryTFunctor',
-	#classTraits : 'CTCategoryTFunctor classTrait',
+	#traits : 'CTCategoryTApplicative',
+	#classTraits : 'CTCategoryTApplicative classTrait',
 	#classVars : [
 		'Nothing'
 	],
@@ -36,4 +36,10 @@ CTCategoryMaybe >> hash [
 { #category : #'as yet unclassified' }
 CTCategoryMaybe >> ifNothing: nBlock ifJust: jBlock [
 	self subclassResponsibility
+]
+
+{ #category : #'as yet unclassified' }
+CTCategoryMaybe >> pure: object [
+
+	^ object just
 ]

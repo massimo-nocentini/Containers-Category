@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #'accessing - structure variables' }
+CTCategoryMaybeNothing >> <*> functorJust [
+
+	^ self class nothing
+]
+
+{ #category : #'accessing - structure variables' }
 CTCategoryMaybeNothing >> fmap: aBlock [
 
 	^ self class nothing
