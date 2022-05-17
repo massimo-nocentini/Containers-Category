@@ -23,6 +23,12 @@ CTCategoryMaybeJust >> content: anObject [
 	content := anObject
 ]
 
+{ #category : #'accessing - structure variables' }
+CTCategoryMaybeJust >> fmap: aBlock [
+
+	^ (aBlock value: self content) just
+]
+
 { #category : #comparing }
 CTCategoryMaybeJust >> hash [
 
