@@ -1,6 +1,8 @@
 Class {
 	#name : #CTCategoryMaybe,
 	#superclass : #Object,
+	#traits : 'CTCategoryTFunctor',
+	#classTraits : 'CTCategoryTFunctor classTrait',
 	#classVars : [
 		'Nothing'
 	],
