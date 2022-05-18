@@ -37,14 +37,25 @@ CTCategoryTest >> testApplicativeCollectionOneArgBlocks [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testApplicativeCollectionTwoArgsBlock [
+
+	"(*) <$> [2,5,10] <*> [8,10,11]"
+
+	self
+		assert: (CTCategory collection: { 8. 10. 11 })
+			<*> ((CTCategory collection: { 2. 5. 10 }) <!> [ :i :j | i * j ])
+		equals: (CTCategory collection: #( 16 20 22 40 50 55 80 100 110 ))
+]
+
+{ #category : #tests }
 CTCategoryTest >> testApplicativeCollectionTwoArgsBlocks [
 
 	"[(+),(*)] <*> [1,2] <*> [3,4]"
 
 	| blocks |
 	blocks := CTCategory collection: { 
-			          [ :i :j | i + j ] currified.
-			          [ :i :j | i * j ] currified }.
+			          [ :i :j | i + j ].
+			          [ :i :j | i * j ] }.
 
 	self
 		assert: (CTCategory collection: { 3. 4 })

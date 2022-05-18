@@ -18,9 +18,12 @@ CTCategoryCollection >> <*> aCollectionOfBlocks [
 	i := 0.
 
 	aCollectionOfBlocks do: [ :eachBlock | 
+		| currified |
+		currified := eachBlock currified.
+
 		collection do: [ :eachValue | 
 			i := i + 1.
-			array at: i put: (eachBlock value: eachValue) ] ].
+			array at: i put: (currified value: eachValue) ] ].
 
 	^ self class new
 		  collection: array;
