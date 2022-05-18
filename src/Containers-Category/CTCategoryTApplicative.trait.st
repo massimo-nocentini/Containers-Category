@@ -6,7 +6,13 @@ Trait {
 }
 
 { #category : #'as yet unclassified' }
-CTCategoryTApplicative >> <*> functorBlock [
+CTCategoryTApplicative >> <!> aBlock [
+
+	^ self fmap: aBlock currified
+]
+
+{ #category : #'as yet unclassified' }
+CTCategoryTApplicative >> <*> anApplicative [
 
 	self explicitRequirement
 ]
