@@ -1,5 +1,5 @@
 Class {
-	#name : #CTCatOrderedCollection,
+	#name : #CTCategoryCollection,
 	#superclass : #Object,
 	#traits : 'CTCategoryTApplicative',
 	#classTraits : 'CTCategoryTApplicative classTrait',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CTCatOrderedCollection >> <*> aCollectionOfBlocks [
+CTCategoryCollection >> <*> aCollectionOfBlocks [
 
 	| array i |
 	array := Array new: aCollectionOfBlocks size * collection size.
@@ -20,41 +20,65 @@ CTCatOrderedCollection >> <*> aCollectionOfBlocks [
 	aCollectionOfBlocks do: [ :eachBlock | 
 		collection do: [ :eachValue | 
 			i := i + 1.
-			array at: i put: (eachBlock currified value: eachValue) ] ].
+			array at: i put: (eachBlock value: eachValue) ] ].
 
 	^ self class new
 		  collection: array;
 		  yourself
 ]
 
+{ #category : #comparing }
+CTCategoryCollection >> = anObject [
+
+	"Answer whether the receiver and anObject represent the same object."
+
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ collection = anObject collection
+]
+
 { #category : #accessing }
-CTCatOrderedCollection >> collection: anObject [
+CTCategoryCollection >> collection [
+
+	^ collection
+]
+
+{ #category : #accessing }
+CTCategoryCollection >> collection: anObject [
 
 	collection := anObject
 ]
 
 { #category : #enumerating }
-CTCatOrderedCollection >> do: aBlock [
+CTCategoryCollection >> do: aBlock [
 
 	collection do: aBlock
 ]
 
 { #category : #'accessing - structure variables' }
-CTCatOrderedCollection >> fmap: aBlock [
+CTCategoryCollection >> fmap: aBlock [
 
 	^ self class new
 		  collection: (collection collect: aBlock);
 		  yourself
 ]
 
+{ #category : #comparing }
+CTCategoryCollection >> hash [
+
+	"Answer an integer value that is related to the identity of the receiver."
+
+	^ collection hash
+]
+
 { #category : #'as yet unclassified' }
-CTCatOrderedCollection >> pure: object [
+CTCategoryCollection >> pure: object [
 
 	collection := OrderedCollection with: object
 ]
 
 { #category : #accessing }
-CTCatOrderedCollection >> size [
+CTCategoryCollection >> size [
 
 	^ collection size
 ]
