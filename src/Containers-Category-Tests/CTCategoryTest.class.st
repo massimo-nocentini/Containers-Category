@@ -133,3 +133,18 @@ CTCategoryTest >> testApplicativeSequence [
 					 (CTCategory just: 1) } asLinkedList firstLink)
 		equals: (CTCategory just: 3 ~~> (2 ~~> (1 ~~> nil)))
 ]
+
+{ #category : #tests }
+CTCategoryTest >> testApplicativeSequenceLists [
+
+	"sequenceA [[1,2,3],[4,5,6]]"
+
+	self
+		assert: (((CTCategory collection: {  }) sequenceA: { 
+					  (CTCategory collection: { 1. 2. 3 }).
+					  (CTCategory collection: { 4. 5. 6 }) } asLinkedList firstLink)
+				 collection collect: #asArray)
+		equals:
+			#( #( 1 4 ) #( 1 5 ) #( 1 6 ) #( 2 4 ) #( 2 5 ) #( 2 6 ) #( 3 4 )
+			   #( 3 5 ) #( 3 6 ) )
+]
