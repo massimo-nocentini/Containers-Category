@@ -10,12 +10,6 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CTCategoryBlock >> ! anObject [
-
-	^ block ! anObject
-]
-
-{ #category : #'as yet unclassified' }
 CTCategoryBlock >> <*> anApplicative [
 
 	"
@@ -27,8 +21,14 @@ instance Applicative ((->) r) where
 	"
 
 	^ self class new
-		  block: [ :x | anApplicative ! x ! (block ! x) ];
+		  block: [ :x | anApplicative block ! x ! (block ! x) ];
 		  yourself
+]
+
+{ #category : #accessing }
+CTCategoryBlock >> block [
+
+	^ block
 ]
 
 { #category : #accessing }
@@ -65,10 +65,4 @@ instance Applicative ((->) r) where
 	"
 
 	block := [ :useless | object ]
-]
-
-{ #category : #'as yet unclassified' }
-CTCategoryBlock >> value: anObject [
-
-	^ block value: anObject
 ]

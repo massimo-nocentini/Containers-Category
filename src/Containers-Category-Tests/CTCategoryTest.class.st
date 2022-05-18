@@ -18,13 +18,13 @@ CTCategoryTest >> testApplicativeBlock [
 	                 ((CTCategory block: [ :i | i + 3 ])
 	                  <!> [ :i :j | i + j ]).
 
-	self assert: blockCategory ! 5 equals: 508.
+	self assert: blockCategory block ! 5 equals: 508.
 
 	blockCategory := (CTCategory block: [ :i | i * 100 ])
 	                 <*> ((CTCategory block: [ :i | i + 3 ])
 		                  <!> [ :i :j | Array with: i with: j ]).
 
-	self assert: blockCategory ! 5 equals: { 8. 500 }
+	self assert: blockCategory block ! 5 equals: { 8. 500 }
 ]
 
 { #category : #tests }
@@ -38,7 +38,7 @@ CTCategoryTest >> testApplicativeBlockThreeArgs [
 		                  <*> ((CTCategory block: [ :i | i + 3 ])
 			                   <!> [ :i :j :k | Array with: i with: j with: k ])).
 
-	self assert: blockCategory ! 5 equals: { 
+	self assert: blockCategory block ! 5 equals: { 
 			8.
 			10.
 			(5 / 2) }
@@ -104,4 +104,32 @@ CTCategoryTest >> testApplicativeCollectionTwoArgsBlocks [
 		assert: (CTCategory collection: { 3. 4 })
 			<*> ((CTCategory collection: { 1. 2 }) <*> blocks)
 		equals: (CTCategory collection: { 4. 5. 5. 6. 3. 4. 6. 8 })
+]
+
+{ #category : #tests }
+CTCategoryTest >> testApplicativeLiftA2ApplicativeMaybeCollection [
+
+	"liftA2 (:) (Just 3) (Just [4])"
+
+	| aJust |
+	aJust := (CTCategory just: 3)
+		         liftA2: [ :obj :aLink | obj ~~> aLink ]
+		         applicative: (CTCategory just: 4 ~~> nil).
+
+	self
+		assert: aJust content asArray
+		equals: (CTCategory just: 3 ~~> (4 ~~> nil)) content asArray
+]
+
+{ #category : #tests }
+CTCategoryTest >> testApplicativeSequence [
+
+	"sequenceA [Just 3, Just 2, Just 1]"
+
+	self
+		assert: ((CTCategory just: nil) sequenceA: { 
+					 (CTCategory just: 3).
+					 (CTCategory just: 2).
+					 (CTCategory just: 1) } asLinkedList firstLink)
+		equals: (CTCategory just: 3 ~~> (2 ~~> (1 ~~> nil)))
 ]

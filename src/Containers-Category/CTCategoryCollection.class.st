@@ -10,20 +10,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CTCategoryCollection >> <*> aCollectionOfBlocks [
+CTCategoryCollection >> <*> anApplicativeOfBlocks [
 
-	| array i |
-	array := Array new: aCollectionOfBlocks size * collection size.
+	| array i otherCollection |
+	otherCollection := anApplicativeOfBlocks collection.
+
+	array := Array new: collection size * otherCollection size.
 
 	i := 0.
 
-	aCollectionOfBlocks do: [ :eachBlock | 
+	otherCollection do: [ :eachBlock | 
 		| currified |
 		currified := eachBlock currified.
 
 		collection do: [ :eachValue | 
 			i := i + 1.
-			array at: i put: (currified value: eachValue) ] ].
+			array at: i put: currified ! eachValue ] ].
 
 	^ self class new
 		  collection: array;
@@ -52,12 +54,6 @@ CTCategoryCollection >> collection: anObject [
 	collection := anObject
 ]
 
-{ #category : #enumerating }
-CTCategoryCollection >> do: aBlock [
-
-	collection do: aBlock
-]
-
 { #category : #'accessing - structure variables' }
 CTCategoryCollection >> fmap: aBlock [
 
@@ -78,10 +74,4 @@ CTCategoryCollection >> hash [
 CTCategoryCollection >> pure: object [
 
 	collection := OrderedCollection with: object
-]
-
-{ #category : #accessing }
-CTCategoryCollection >> size [
-
-	^ collection size
 ]

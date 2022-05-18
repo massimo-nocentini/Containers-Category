@@ -7,13 +7,13 @@ Class {
 { #category : #'accessing - structure variables' }
 CTCategoryMaybeNothing >> <*> functorJust [
 
-	^ self class nothing
+	^ self class new
 ]
 
 { #category : #'accessing - structure variables' }
 CTCategoryMaybeNothing >> fmap: aBlock [
 
-	^ self class nothing
+	^ self class new
 ]
 
 { #category : #'as yet unclassified' }

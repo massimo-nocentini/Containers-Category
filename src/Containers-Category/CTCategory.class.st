@@ -19,3 +19,17 @@ CTCategory class >> collection: aCollection [
 		  collection: aCollection;
 		  yourself
 ]
+
+{ #category : #factory }
+CTCategory class >> just: anObject [
+
+	^ CTCategoryMaybeJust new
+		  content: anObject;
+		  yourself
+]
+
+{ #category : #factory }
+CTCategory class >> nothing [
+
+	^ CTCategoryMaybeNothing new
+]
