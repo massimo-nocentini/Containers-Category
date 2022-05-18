@@ -18,6 +18,12 @@ CTCategoryTest >> testApplicativeCollectionAppendStrings [
 			((CTCategory collection: { 'ha'. 'heh'. 'hmm' })
 			 <!> [ :i :j | i , j ])
 		equals: (CTCategory collection:
+				 #( 'ha?' 'ha!' 'ha.' 'heh?' 'heh!' 'heh.' 'hmm?' 'hmm!' 'hmm.' )).
+
+	self
+		assert: (CTCategory collection: { '?'. '!'. '.' })
+			<*> ((CTCategory collection: { 'ha'. 'heh'. 'hmm' }) <!> #,)
+		equals: (CTCategory collection:
 				 #( 'ha?' 'ha!' 'ha.' 'heh?' 'heh!' 'heh.' 'hmm?' 'hmm!' 'hmm.' ))
 ]
 
