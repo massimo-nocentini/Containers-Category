@@ -50,3 +50,18 @@ sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
 			  liftA2: [ :obj :restLink | obj ~~> restLink ]
 			  applicative: (self sequenceA: aLink nextLink) ]
 ]
+
+{ #category : #'as yet unclassified' }
+CTCategoryTApplicative >> sequenceAsequenceable: aLink [
+
+	"
+sequenceA :: (Applicative f) => [f a] -> f [a]
+sequenceA [] = pure []
+sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
+"
+
+	^ aLink ifEmpty: [ self pure: {  } ] ifNotEmpty: [ 
+		  aLink first
+			  liftA2: [ :obj :restLink | Array with: obj withAll: restLink ]
+			  applicative: (self sequenceAsequenceable: aLink allButFirst) ]
+]

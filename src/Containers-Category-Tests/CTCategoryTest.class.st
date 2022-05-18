@@ -130,8 +130,39 @@ CTCategoryTest >> testApplicativeSequence [
 		assert: ((CTCategory just: nil) sequenceA: { 
 					 (CTCategory just: 3).
 					 (CTCategory just: 2).
-					 (CTCategory just: 1) } asLinkedList firstLink)
-		equals: (CTCategory just: 3 ~~> (2 ~~> (1 ~~> nil)))
+					 (CTCategory just: 1) } asLinkedList firstLink) content asArray
+		equals: (CTCategory just: 3 ~~> (2 ~~> (1 ~~> nil))) content asArray
+]
+
+{ #category : #tests }
+CTCategoryTest >> testApplicativeSequenceAsequenceable [
+
+	"sequenceA [Just 3, Just 2, Just 1]"
+
+	self
+		assert: ((CTCategory just: {  }) sequenceAsequenceable: { 
+					 (CTCategory just: 3).
+					 (CTCategory just: 2).
+					 (CTCategory just: 1) })
+		equals: (CTCategory just: { 3. 2. 1 })
+]
+
+{ #category : #tests }
+CTCategoryTest >> testApplicativeSequenceAsequenceableLists [
+
+	"sequenceA [[1,2,3],[4,5,6]]"
+
+	self
+		assert: ((CTCategory collection: {  }) sequenceAsequenceable: { 
+					 (CTCategory collection: { 1. 2. 3 }).
+					 (CTCategory collection: { 4. 5. 6. 7 }).
+					 (CTCategory collection: { 8. 9 }) })
+		equals: (CTCategory collection:
+				 #( #( 1 4 8 ) #( 1 4 9 ) #( 1 5 8 ) #( 1 5 9 ) #( 1 6 8 )
+				    #( 1 6 9 ) #( 1 7 8 ) #( 1 7 9 ) #( 2 4 8 ) #( 2 4 9 )
+				    #( 2 5 8 ) #( 2 5 9 ) #( 2 6 8 ) #( 2 6 9 ) #( 2 7 8 )
+				    #( 2 7 9 ) #( 3 4 8 ) #( 3 4 9 ) #( 3 5 8 ) #( 3 5 9 )
+				    #( 3 6 8 ) #( 3 6 9 ) #( 3 7 8 ) #( 3 7 9 ) ))
 ]
 
 { #category : #tests }
