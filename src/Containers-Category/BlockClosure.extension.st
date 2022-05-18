@@ -32,17 +32,3 @@ BlockClosure class >> currify: aBlock numArgs: n argsBlock: argsBlock [
 				  numArgs: n - 1
 				  argsBlock: [ :args | argsBlock value: arg ~~> args ] ] ]
 ]
-
-{ #category : #'*Containers-Category' }
-BlockClosure >> fmap: aBlock [
-
-	"
-	instance Functor ((->) r) where
-		fmap f g = (\x -> f (g x))
-	"
-
-	^ [ :object | 
-	  | value |
-	  value := self value: object.
-	  aBlock value: value ]
-]
