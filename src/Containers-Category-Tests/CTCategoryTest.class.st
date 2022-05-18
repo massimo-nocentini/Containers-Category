@@ -8,6 +8,43 @@ Class {
 }
 
 { #category : #tests }
+CTCategoryTest >> testApplicativeBlock [
+
+	"(+) <$> (+3) <*> (*100) $ 5"
+
+	| blockCategory |
+	blockCategory := (CTCategory block: [ :i | i * 100 ])
+	                 <*>
+	                 ((CTCategory block: [ :i | i + 3 ])
+	                  <!> [ :i :j | i + j ]).
+
+	self assert: blockCategory ! 5 equals: 508.
+
+	blockCategory := (CTCategory block: [ :i | i * 100 ])
+	                 <*> ((CTCategory block: [ :i | i + 3 ])
+		                  <!> [ :i :j | Array with: i with: j ]).
+
+	self assert: blockCategory ! 5 equals: { 8. 500 }
+]
+
+{ #category : #tests }
+CTCategoryTest >> testApplicativeBlockThreeArgs [
+
+	"(\x y z -> [x,y,z]) <$> (+3) <*> (*2) <*> (/2) $ 5"
+
+	| blockCategory |
+	blockCategory := (CTCategory block: [ :i | i / 2 ])
+	                 <*> ((CTCategory block: [ :i | i * 2 ])
+		                  <*> ((CTCategory block: [ :i | i + 3 ])
+			                   <!> [ :i :j :k | Array with: i with: j with: k ])).
+
+	self assert: blockCategory ! 5 equals: { 
+			8.
+			10.
+			(5 / 2) }
+]
+
+{ #category : #tests }
 CTCategoryTest >> testApplicativeCollectionAppendStrings [
 
 	"(++) <$> ['ha','heh','hmm'] <*> ['?','!','.']"

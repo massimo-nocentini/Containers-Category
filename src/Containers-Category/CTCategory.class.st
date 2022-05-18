@@ -5,6 +5,14 @@ Class {
 }
 
 { #category : #factory }
+CTCategory class >> block: aBlock [
+
+	^ CTCategoryBlock new
+		  block: aBlock currified;
+		  yourself
+]
+
+{ #category : #factory }
 CTCategory class >> collection: aCollection [
 
 	^ CTCategoryCollection new
