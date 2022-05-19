@@ -207,6 +207,114 @@ CTCategoryTest >> testApplicativeSequenceLists [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testMonadDoMaybe [
+
+	"
+
+foo :: Maybe String
+foo = Just 3   >>= (\x ->
+      Just ""!"" >>= (\y ->
+		Just (show x ++ y)))
+	
+	"
+
+	self
+		assert: (CTCategory just: 3) >>= [ :x | 
+			(CTCategory just: '!') >>= [ :y | CTCategory just: x asString , y ] ]
+		equals: (CTCategory just: '3!')
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadList [
+
+	"[3,4,5] >>= \x -> [x,-x]"
+
+	self
+		assert: (CTCategory collection: { 3. 4. 5 })
+			>>= [ :x | CTCategory collection: (Array with: x with: x negated) ]
+		equals: (CTCategory collection: { 3. -3. 4. -4. 5. -5 }).
+
+	"[1,2,3] >>= \x -> []"
+	self
+		assert: (CTCategory collection: { 3. 4. 5 })
+			>>= [ :x | CTCategory collection: {  } ]
+		equals: (CTCategory collection: {  }).
+
+	"[1,2] >>= \n -> ['a','b'] >>= \ch -> return (n, ch)"
+	self
+		assert: (CTCategory collection: { 1. 2 }) >>= [ :n | 
+			(CTCategory collection: { $a. $b })
+			>>= [ :char | 
+			CTCategoryCollection return: (Array with: n with: char) ] ]
+		equals:
+		(CTCategory collection: #( #( 1 $a ) #( 1 $b ) #( 2 $a ) #( 2 $b ) ))
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadMaybe [
+
+	"Just 9 >>= \x -> return (x*10)"
+
+	self
+		assert:
+		(CTCategory just: 9) >>= [ :x | CTCategoryMaybe return: x * 10 ]
+		equals: (CTCategory just: 9 * 10).
+
+	self
+		assert:
+		CTCategory nothing >>= [ :x | CTCategoryMaybe return: x * 10 ]
+		equals: CTCategory nothing
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadPierrePoleWalking [
+
+	| pole |
+	pole := CTCategoryPole new.
+
+	self
+		assert: (((pole landLeft: 1) landRight: 1) landLeft: 2) value
+		equals: 3 @ 1.
+
+	self
+		assert: (pole -! [ :p | p landLeft: 1 ] -! [ :p | p landRight: 1 ]
+			 -! [ :p | p landLeft: 2 ]) value
+		equals: 3 @ 1.
+
+	self
+		assert: (pole maybeLandLeft: 10) value
+		equals: CTCategory nothing.
+
+	"return (0, 0) >>= landRight 2 >>= landLeft 2 >>= landRight 2"
+	self
+		assert:
+			(CTCategoryMaybe return: pole) >>= [ :p | p maybeLandRight: 2 ]
+			>>= [ :p | p maybeLandLeft: 2 ] >>= [ :p | p maybeLandRight: 2 ]
+		equals: (CTCategory just: (CTCategoryPole new
+					  left: 2;
+					  right: 4;
+					  yourself)).
+
+	self
+		assert: (pole -! [ :p | p landLeft: 1 ] -! [ :p | p landRight: 4 ]
+			 -! [ :p | p landLeft: -1 ] -! [ :p | p landRight: -2 ]) value
+		equals: 0 @ 2.
+
+	self
+		assert:
+			(CTCategoryMaybe return: pole) >>= [ :p | p maybeLandLeft: 1 ]
+			>>= [ :p | p maybeLandRight: 4 ] >>= [ :p | p maybeLandLeft: -1 ]
+			>>= [ :p | p maybeLandRight: -2 ]
+		equals: CTCategory nothing.
+
+	self
+		assert:
+			(CTCategoryMaybe return: pole) >>= [ :p | p maybeLandLeft: 1 ]
+			>>= [ :p | p maybeBanana ] >>= [ :p | p maybeLandRight: 1 ]
+		equals: CTCategory nothing
+]
+
+{ #category : #tests }
 CTCategoryTest >> testMonoidmappendCollection [
 
 	"[1,2,3] `mappend` [4,5,6]"

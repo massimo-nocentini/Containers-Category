@@ -10,6 +10,12 @@ CTCategoryMaybeNothing >> <*> functorJust [
 	^ self class new
 ]
 
+{ #category : #monad }
+CTCategoryMaybeNothing >> >>= aBlock [
+
+	^ self
+]
+
 { #category : #'accessing - structure variables' }
 CTCategoryMaybeNothing >> fmap: aBlock [
 

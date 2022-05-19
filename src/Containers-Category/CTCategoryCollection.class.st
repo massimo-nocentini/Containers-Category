@@ -1,13 +1,19 @@
 Class {
 	#name : #CTCategoryCollection,
 	#superclass : #Object,
-	#traits : 'CTCategoryTApplicative + CTCategoryTMonoid',
-	#classTraits : 'CTCategoryTApplicative classTrait + CTCategoryTMonoid classTrait',
+	#traits : 'CTCategoryTMonad + CTCategoryTMonoid',
+	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonoid classTrait',
 	#instVars : [
 		'collection'
 	],
 	#category : #'Containers-Category'
 }
+
+{ #category : #monad }
+CTCategoryCollection class >> fail: aString [
+
+	^ self mempty
+]
 
 { #category : #monoid }
 CTCategoryCollection class >> mempty [
@@ -23,6 +29,12 @@ CTCategoryCollection class >> pure: object [
 	^ self new
 		  collection: (OrderedCollection with: object);
 		  yourself
+]
+
+{ #category : #monad }
+CTCategoryCollection class >> return: anObject [
+
+	^ self pure: anObject
 ]
 
 { #category : #applicative }
@@ -56,6 +68,16 @@ CTCategoryCollection >> = anObject [
 	self == anObject ifTrue: [ ^ true ].
 	self class = anObject class ifFalse: [ ^ false ].
 	^ collection = anObject collection
+]
+
+{ #category : #monad }
+CTCategoryCollection >> >>= aBlock [
+
+	^ self class new
+		  collection:
+			  ((self fmap: aBlock) collection flatCollect: [ :each | 
+					   each collection ]);
+		  yourself
 ]
 
 { #category : #accessing }

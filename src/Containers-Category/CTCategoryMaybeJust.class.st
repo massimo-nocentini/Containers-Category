@@ -19,6 +19,12 @@ CTCategoryMaybeJust >> = anObject [
 	^ super = anObject and: [ self content = anObject content ]
 ]
 
+{ #category : #monad }
+CTCategoryMaybeJust >> >>= aBlock [
+
+	^ aBlock ! self content
+]
+
 { #category : #accessing }
 CTCategoryMaybeJust >> content [
 	^ content
