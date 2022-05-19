@@ -4,7 +4,7 @@ Extension { #name : #Symbol }
 Symbol >> currified [
 
 	^ self isUnary
-		  ifTrue: [ Error signal ]
+		  ifTrue: [ [ :obj | obj perform: self ] ]
 		  ifFalse: [ 
 			  self isBinary
 				  ifTrue: [ 

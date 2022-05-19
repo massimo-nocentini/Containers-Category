@@ -6,6 +6,42 @@ Trait {
 }
 
 { #category : #'as yet unclassified' }
+CTCategoryTApplicative classSide >> pure: object [
+
+	self explicitRequirement
+]
+
+{ #category : #'as yet unclassified' }
+CTCategoryTApplicative classSide >> sequenceA: aLink [
+
+	"
+sequenceA :: (Applicative f) => [f a] -> f [a]
+sequenceA [] = pure []
+sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
+"
+
+	^ aLink ifNil: [ self pure: nil ] ifNotNil: [ 
+		  aLink value
+			  applicative: (self sequenceA: aLink nextLink)
+			  lift: [ :obj :restLink | obj ~~> restLink ] ]
+]
+
+{ #category : #'as yet unclassified' }
+CTCategoryTApplicative classSide >> sequenceAsequenceable: aLink [
+
+	"
+sequenceA :: (Applicative f) => [f a] -> f [a]
+sequenceA [] = pure []
+sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
+"
+
+	^ aLink ifEmpty: [ self pure: {  } ] ifNotEmpty: [ 
+		  aLink first
+			  applicative: (self sequenceAsequenceable: aLink allButFirst)
+			  lift: [ :obj :restLink | Array with: obj withAll: restLink ] ]
+]
+
+{ #category : #'as yet unclassified' }
 CTCategoryTApplicative >> <!> aBlock [
 
 	^ self fmap: aBlock currified
@@ -18,7 +54,7 @@ CTCategoryTApplicative >> <*> anApplicative [
 ]
 
 { #category : #'as yet unclassified' }
-CTCategoryTApplicative >> liftA2: aTwoArgsBlock applicative: anApplicative [
+CTCategoryTApplicative >> applicative: anApplicative lift: aTwoArgsBlock [
 
 	"
 
@@ -28,40 +64,4 @@ liftA2 f a b = f <$> a <*> b
 "
 
 	^ anApplicative <*> (self <!> aTwoArgsBlock)
-]
-
-{ #category : #'as yet unclassified' }
-CTCategoryTApplicative >> pure: object [
-
-	self explicitRequirement
-]
-
-{ #category : #'as yet unclassified' }
-CTCategoryTApplicative >> sequenceA: aLink [
-
-	"
-sequenceA :: (Applicative f) => [f a] -> f [a]
-sequenceA [] = pure []
-sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
-"
-
-	^ aLink ifNil: [ self pure: nil ] ifNotNil: [ 
-		  aLink value
-			  liftA2: [ :obj :restLink | obj ~~> restLink ]
-			  applicative: (self sequenceA: aLink nextLink) ]
-]
-
-{ #category : #'as yet unclassified' }
-CTCategoryTApplicative >> sequenceAsequenceable: aLink [
-
-	"
-sequenceA :: (Applicative f) => [f a] -> f [a]
-sequenceA [] = pure []
-sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
-"
-
-	^ aLink ifEmpty: [ self pure: {  } ] ifNotEmpty: [ 
-		  aLink first
-			  liftA2: [ :obj :restLink | Array with: obj withAll: restLink ]
-			  applicative: (self sequenceAsequenceable: aLink allButFirst) ]
 ]

@@ -6,9 +6,18 @@ BlockClosure >> currified [
 	| size |
 	size := self numArgs.
 
-	^ size < 2
-		  ifTrue: [ self ]
-		  ifFalse: [ self class currify: self numArgs: size ]
+	^ size = 0
+		  ifTrue: [ [ :useless | self value ] ]
+		  ifFalse: [ 
+			  size = 1
+				  ifTrue: [ self ]
+				  ifFalse: [ self class currify: self numArgs: size ] ]
+]
+
+{ #category : #'*Containers-Category' }
+BlockClosure class >> currify: aBlock [
+
+	^ self currify: aBlock numArgs: aBlock numArgs
 ]
 
 { #category : #'*Containers-Category' }

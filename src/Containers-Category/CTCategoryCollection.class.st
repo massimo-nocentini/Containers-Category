@@ -10,6 +10,14 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+CTCategoryCollection class >> pure: object [
+
+	^ self new
+		  collection: (OrderedCollection with: object);
+		  yourself
+]
+
+{ #category : #'as yet unclassified' }
 CTCategoryCollection >> <*> anApplicativeOfBlocks [
 
 	| array i otherCollection |
@@ -68,10 +76,4 @@ CTCategoryCollection >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ collection hash
-]
-
-{ #category : #'as yet unclassified' }
-CTCategoryCollection >> pure: object [
-
-	collection := OrderedCollection with: object
 ]

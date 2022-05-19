@@ -10,6 +10,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+CTCategoryBlock class >> pure: object [
+
+	"
+
+instance Applicative ((->) r) where
+	pure x = (\_ -> x)
+	f <*> g = \x -> f x (g x)
+	
+	"
+
+	^ self new
+		  block: [ :useless | object ];
+		  yourself
+]
+
+{ #category : #'as yet unclassified' }
 CTCategoryBlock >> <*> anApplicative [
 
 	"
@@ -51,18 +67,4 @@ CTCategoryBlock >> fmap: aBlock [
 			  value := block value: object.
 			  aBlock value: value ];
 		  yourself
-]
-
-{ #category : #'as yet unclassified' }
-CTCategoryBlock >> pure: object [
-
-	"
-
-instance Applicative ((->) r) where
-	pure x = (\_ -> x)
-	f <*> g = \x -> f x (g x)
-	
-	"
-
-	block := [ :useless | object ]
 ]

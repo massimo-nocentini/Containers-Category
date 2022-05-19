@@ -21,6 +21,12 @@ CTCategoryMaybe class >> nothing [
 	^ Nothing
 ]
 
+{ #category : #'as yet unclassified' }
+CTCategoryMaybe class >> pure: object [
+
+	^ object just
+]
+
 { #category : #comparing }
 CTCategoryMaybe >> = anObject [
 
@@ -36,10 +42,4 @@ CTCategoryMaybe >> hash [
 { #category : #'as yet unclassified' }
 CTCategoryMaybe >> ifNothing: nBlock ifJust: jBlock [
 	self subclassResponsibility
-]
-
-{ #category : #'as yet unclassified' }
-CTCategoryMaybe >> pure: object [
-
-	^ object just
 ]

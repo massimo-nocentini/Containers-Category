@@ -113,8 +113,8 @@ CTCategoryTest >> testApplicativeLiftA2ApplicativeMaybeCollection [
 
 	| aJust |
 	aJust := (CTCategory just: 3)
-		         liftA2: [ :obj :aLink | obj ~~> aLink ]
-		         applicative: (CTCategory just: 4 ~~> nil).
+		         applicative: (CTCategory just: 4 ~~> nil)
+		         lift: [ :obj :aLink | obj ~~> aLink ].
 
 	self
 		assert: aJust content asArray
@@ -127,10 +127,9 @@ CTCategoryTest >> testApplicativeSequence [
 	"sequenceA [Just 3, Just 2, Just 1]"
 
 	self
-		assert: ((CTCategory just: nil) sequenceA: { 
-					 (CTCategory just: 3).
-					 (CTCategory just: 2).
-					 (CTCategory just: 1) } asLinkedList firstLink) content asArray
+		assert: (CTCategoryMaybe sequenceA: (CTCategory just: 3)
+				 ~~> ((CTCategory just: 2) ~~> ((CTCategory just: 1) ~~> nil)))
+				content asArray
 		equals: (CTCategory just: 3 ~~> (2 ~~> (1 ~~> nil))) content asArray
 ]
 
@@ -140,7 +139,7 @@ CTCategoryTest >> testApplicativeSequenceAsequenceable [
 	"sequenceA [Just 3, Just 2, Just 1]"
 
 	self
-		assert: ((CTCategory just: {  }) sequenceAsequenceable: { 
+		assert: (CTCategoryMaybe sequenceAsequenceable: { 
 					 (CTCategory just: 3).
 					 (CTCategory just: 2).
 					 (CTCategory just: 1) })
@@ -153,7 +152,7 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableLists [
 	"sequenceA [[1,2,3],[4,5,6]]"
 
 	self
-		assert: ((CTCategory collection: {  }) sequenceAsequenceable: { 
+		assert: (CTCategoryCollection sequenceAsequenceable: { 
 					 (CTCategory collection: { 1. 2. 3 }).
 					 (CTCategory collection: { 4. 5. 6. 7 }).
 					 (CTCategory collection: { 8. 9 }) })
@@ -166,12 +165,26 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableLists [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testApplicativeSequenceAsequenceableListsWithEmpty [
+
+	"sequenceA [[1,2,3],[4,5,6]]"
+
+	self
+		assert: (CTCategoryCollection sequenceAsequenceable: { 
+					 (CTCategory collection: { 1. 2. 3 }).
+					 (CTCategory collection: { 4. 5. 6. 7 }).
+					 (CTCategory collection: { 8. 9 }).
+					 (CTCategory collection: {  }) })
+		equals: (CTCategory collection: {  })
+]
+
+{ #category : #tests }
 CTCategoryTest >> testApplicativeSequenceLists [
 
 	"sequenceA [[1,2,3],[4,5,6]]"
 
 	self
-		assert: (((CTCategory collection: {  }) sequenceA: { 
+		assert: ((CTCategoryCollection sequenceA: { 
 					  (CTCategory collection: { 1. 2. 3 }).
 					  (CTCategory collection: { 4. 5. 6 }) } asLinkedList firstLink)
 				 collection collect: #asArray)
