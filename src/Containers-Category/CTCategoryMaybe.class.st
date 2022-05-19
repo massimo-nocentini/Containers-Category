@@ -30,7 +30,7 @@ CTCategoryMaybe class >> nothing [
 { #category : #'as yet unclassified' }
 CTCategoryMaybe class >> pure: object [
 
-	^ object just
+	^ CTCategory just: object
 ]
 
 { #category : #comparing }

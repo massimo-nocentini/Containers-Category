@@ -32,7 +32,9 @@ CTCategoryMaybeJust >> content: anObject [
 { #category : #'accessing - structure variables' }
 CTCategoryMaybeJust >> fmap: aBlock [
 
-	^ (aBlock value: self content) just
+	^ self class new
+		  content: (aBlock value: self content);
+		  yourself
 ]
 
 { #category : #comparing }
