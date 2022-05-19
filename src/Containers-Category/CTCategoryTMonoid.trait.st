@@ -3,7 +3,7 @@ Trait {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #monoid }
 CTCategoryTMonoid classSide >> mconcat: aCollectionOfMonoids [
 
 	^ aCollectionOfMonoids
@@ -11,13 +11,13 @@ CTCategoryTMonoid classSide >> mconcat: aCollectionOfMonoids [
 		  init: self mempty
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #monoid }
 CTCategoryTMonoid classSide >> mempty [
 
 	self explicitRequirement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #monoid }
 CTCategoryTMonoid >> mappend: aMonoid [
 
 	self explicitRequirement

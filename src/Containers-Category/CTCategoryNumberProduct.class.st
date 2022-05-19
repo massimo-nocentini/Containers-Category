@@ -6,7 +6,7 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #monoid }
 CTCategoryNumberProduct class >> mempty [
 
 	^ self new
@@ -14,7 +14,7 @@ CTCategoryNumberProduct class >> mempty [
 		  yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #monoid }
 CTCategoryNumberProduct >> mappend: aMonoid [
 
 	^ self class new

@@ -5,13 +5,13 @@ Trait {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryTApplicative classSide >> pure: object [
 
 	self explicitRequirement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryTApplicative classSide >> sequenceA: aLink [
 
 	"
@@ -26,7 +26,7 @@ sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
 			  lift: [ :obj :restLink | obj ~~> restLink ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryTApplicative classSide >> sequenceAsequenceable: aLink [
 
 	"
@@ -41,19 +41,19 @@ sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
 			  lift: [ :obj :restLink | Array with: obj withAll: restLink ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryTApplicative >> <!> aBlock [
 
 	^ self fmap: aBlock currified
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryTApplicative >> <*> anApplicative [
 
 	self explicitRequirement
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryTApplicative >> applicative: anApplicative lift: aTwoArgsBlock [
 
 	"

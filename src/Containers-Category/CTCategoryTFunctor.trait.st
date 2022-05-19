@@ -3,7 +3,7 @@ Trait {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'accessing - structure variables' }
+{ #category : #functor }
 CTCategoryTFunctor >> fmap: aBlock [
 
 	self explicitRequirement

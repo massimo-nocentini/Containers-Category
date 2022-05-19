@@ -9,7 +9,7 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryBlock class >> pure: object [
 
 	"
@@ -25,7 +25,7 @@ instance Applicative ((->) r) where
 		  yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryBlock >> <*> anApplicative [
 
 	"
@@ -53,7 +53,7 @@ CTCategoryBlock >> block: anObject [
 	block := anObject
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : #functor }
 CTCategoryBlock >> fmap: aBlock [
 
 	"

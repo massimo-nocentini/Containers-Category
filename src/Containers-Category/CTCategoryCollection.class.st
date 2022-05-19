@@ -9,7 +9,7 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #monoid }
 CTCategoryCollection class >> mempty [
 
 	^ self new
@@ -17,7 +17,7 @@ CTCategoryCollection class >> mempty [
 		  yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryCollection class >> pure: object [
 
 	^ self new
@@ -25,7 +25,7 @@ CTCategoryCollection class >> pure: object [
 		  yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryCollection >> <*> anApplicativeOfBlocks [
 
 	| array i otherCollection |
@@ -70,7 +70,7 @@ CTCategoryCollection >> collection: anObject [
 	collection := anObject
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : #functor }
 CTCategoryCollection >> fmap: aBlock [
 
 	^ self class new
@@ -86,7 +86,7 @@ CTCategoryCollection >> hash [
 	^ collection hash
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #monoid }
 CTCategoryCollection >> mappend: aMonoid [
 
 	"

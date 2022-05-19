@@ -15,7 +15,7 @@ CTCategoryMaybe class >> initialize [
 	Nothing := CTCategoryMaybeNothing new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #monoid }
 CTCategoryMaybe class >> mempty [
 
 	^ self nothing
@@ -27,7 +27,7 @@ CTCategoryMaybe class >> nothing [
 	^ Nothing
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #applicative }
 CTCategoryMaybe class >> pure: object [
 
 	^ CTCategory just: object
@@ -45,7 +45,7 @@ CTCategoryMaybe >> hash [
 	^ self class hash
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #controlling }
 CTCategoryMaybe >> ifNothing: nBlock ifJust: jBlock [
 	self subclassResponsibility
 ]

@@ -28,7 +28,7 @@ CTCategoryEither >> content: anObject [
 	content := anObject
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : #functor }
 CTCategoryEither >> fmap: aBlock [
 
 	self subclassResponsibility
