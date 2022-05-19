@@ -134,7 +134,7 @@ CTCategoryTest >> testApplicativeSequence [
 ]
 
 { #category : #tests }
-CTCategoryTest >> testApplicativeSequenceAsequenceable [
+CTCategoryTest >> testApplicativeSequenceAsequenceableJusts [
 
 	"sequenceA [Just 3, Just 2, Just 1]"
 
@@ -176,6 +176,19 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableListsWithEmpty [
 					 (CTCategory collection: { 8. 9 }).
 					 (CTCategory collection: {  }) })
 		equals: (CTCategory collection: {  })
+]
+
+{ #category : #tests }
+CTCategoryTest >> testApplicativeSequenceAsequenceableUnaryBlocks [
+
+	"sequenceA [(+3),(+2),(+1)] 3"
+
+	self
+		assert: (CTCategoryBlock sequenceAsequenceable: { 
+					 (CTCategory block: [ :i | i + 3 ]).
+					 (CTCategory block: [ :i | i + 2 ]).
+					 (CTCategory block: [ :i | i + 1 ]) }) block ! 3
+		equals: { 6. 5. 4 }
 ]
 
 { #category : #tests }
