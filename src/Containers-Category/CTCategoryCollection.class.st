@@ -1,13 +1,21 @@
 Class {
 	#name : #CTCategoryCollection,
 	#superclass : #Object,
-	#traits : 'CTCategoryTApplicative',
-	#classTraits : 'CTCategoryTApplicative classTrait',
+	#traits : 'CTCategoryTApplicative + CTCategoryTMonoid',
+	#classTraits : 'CTCategoryTApplicative classTrait + CTCategoryTMonoid classTrait',
 	#instVars : [
 		'collection'
 	],
 	#category : #'Containers-Category'
 }
+
+{ #category : #'as yet unclassified' }
+CTCategoryCollection class >> mempty [
+
+	^ self new
+		  collection: {  };
+		  yourself
+]
 
 { #category : #'as yet unclassified' }
 CTCategoryCollection class >> pure: object [
@@ -76,4 +84,20 @@ CTCategoryCollection >> hash [
 	"Answer an integer value that is related to the identity of the receiver."
 
 	^ collection hash
+]
+
+{ #category : #'as yet unclassified' }
+CTCategoryCollection >> mappend: aMonoid [
+
+	"
+
+	instance Monoid [a] where
+		mempty = []
+   		mappend = (++)
+	
+	"
+
+	^ self class new
+		  collection: collection , aMonoid collection;
+		  yourself
 ]

@@ -33,3 +33,11 @@ CTCategory class >> nothing [
 
 	^ CTCategoryMaybeNothing new
 ]
+
+{ #category : #factory }
+CTCategory class >> product: aNumber [
+
+	^ CTCategoryNumberProduct new
+		  number: aNumber;
+		  yourself
+]

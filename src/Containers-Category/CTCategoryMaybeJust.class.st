@@ -46,6 +46,15 @@ CTCategoryMaybeJust >> ifNothing: nBlock ifJust: jBlock [
 	^ jBlock value: self
 ]
 
+{ #category : #'as yet unclassified' }
+CTCategoryMaybeJust >> mappend: aMonoid [
+
+	^ aMonoid ifNothing: [ self ] ifJust: [ :aJust | 
+		  self class new
+			  content: (self content mappend: aJust content);
+			  yourself ]
+]
+
 { #category : #printing }
 CTCategoryMaybeJust >> printOn: aStream [
 	super printOn: aStream.

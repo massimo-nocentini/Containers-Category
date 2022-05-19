@@ -205,3 +205,77 @@ CTCategoryTest >> testApplicativeSequenceLists [
 			#( #( 1 4 ) #( 1 5 ) #( 1 6 ) #( 2 4 ) #( 2 5 ) #( 2 6 ) #( 3 4 )
 			   #( 3 5 ) #( 3 6 ) )
 ]
+
+{ #category : #tests }
+CTCategoryTest >> testMonoidmappendCollection [
+
+	"[1,2,3] `mappend` [4,5,6]"
+
+	self
+		assert: ((CTCategory collection: { 1. 2. 3 }) mappend:
+				 (CTCategory collection: { 4. 5. 6 }))
+		equals: (CTCategory collection: { 1. 2. 3. 4. 5. 6 })
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonoidmappendMaybeProduct [
+
+	"Just (Product 3) `mappend` Just (Product 4)"
+
+	self
+		assert: ((CTCategory just: (CTCategory product: 3)) mappend:
+				 (CTCategory just: (CTCategory product: 9)))
+		equals: (CTCategory just: (CTCategory product: 27))
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonoidmappendProduct [
+
+	"Product 3 `mappend` Product 9"
+
+	self
+		assert: ((CTCategory product: 3) mappend: (CTCategory product: 9))
+		equals: (CTCategory product: 27)
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonoidmappendStrings [
+
+	"('one' `mappend` 'two') `mappend` 'tree'"
+
+	self
+		assert: (((CTCategory collection: 'one') mappend:
+				  (CTCategory collection: 'two')) mappend:
+				 (CTCategory collection: 'three'))
+		equals: (CTCategory collection: 'onetwothree').
+
+	self
+		assert: ((CTCategory collection: 'one') mappend:
+				 ((CTCategory collection: 'two') mappend:
+					  (CTCategory collection: 'three')))
+		equals: (CTCategory collection: 'onetwothree')
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonoidmconcat [
+
+	"mconcat [[1,2],[3,6],[9]]"
+
+	self
+		assert: (CTCategoryCollection mconcat: { 
+					 (CTCategory collection: { 1. 2 }).
+					 (CTCategory collection: { 3. 6 }).
+					 (CTCategory collection: { 9 }) })
+		equals: (CTCategory collection: { 1. 2. 3. 6. 9 })
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonoidmconcatProduct [
+
+	"getProduct . mconcat . map Product $ [3,4,2]"
+
+	self
+		assert: (CTCategoryNumberProduct mconcat:
+				 ({ 3. 4. 2 } collect: [ :each | CTCategory product: each ]))
+		equals: (CTCategory product: 3 * 4 * 2)
+]

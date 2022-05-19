@@ -1,8 +1,8 @@
 Class {
 	#name : #CTCategoryMaybe,
 	#superclass : #Object,
-	#traits : 'CTCategoryTApplicative',
-	#classTraits : 'CTCategoryTApplicative classTrait',
+	#traits : 'CTCategoryTApplicative + CTCategoryTMonoid',
+	#classTraits : 'CTCategoryTApplicative classTrait + CTCategoryTMonoid classTrait',
 	#classVars : [
 		'Nothing'
 	],
@@ -13,6 +13,12 @@ Class {
 CTCategoryMaybe class >> initialize [
 
 	Nothing := CTCategoryMaybeNothing new
+]
+
+{ #category : #'as yet unclassified' }
+CTCategoryMaybe class >> mempty [
+
+	^ self nothing
 ]
 
 { #category : #accessing }

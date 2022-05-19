@@ -20,3 +20,9 @@ CTCategoryMaybeNothing >> fmap: aBlock [
 CTCategoryMaybeNothing >> ifNothing: nBlock ifJust: jBlock [
 	^ nBlock value
 ]
+
+{ #category : #'as yet unclassified' }
+CTCategoryMaybeNothing >> mappend: aMonoid [
+
+	^ aMonoid
+]
