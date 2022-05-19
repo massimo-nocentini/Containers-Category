@@ -225,6 +225,54 @@ foo = Just 3   >>= (\x ->
 ]
 
 { #category : #tests }
+CTCategoryTest >> testMonadFish [
+
+	"
+ghci> let f x = [x,-x]
+ghci> let g x = [x*3,x*2]
+ghci> let h = f <=< g
+ghci> h 3	
+	"
+
+	| f g |
+	f := [ :x | 
+	     CTCategory collection: { 
+			     x.
+			     x negated } ].
+
+	g := [ :x | 
+	     CTCategory collection: { 
+			     (x * 3).
+			     (x * 2) } ].
+
+	self
+		assert: f >=> g ! 3
+		equals: (CTCategory collection: { 9. -9. 6. -6 })
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadGuard [
+
+	"guard (5 > 2) :: Maybe ()"
+
+	self
+		assert: (CTCategoryMaybe guard: 5 > 2)
+		equals: (CTCategory just: nil)
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadGuardInBind [
+
+	"[1..50] >>= (\x -> guard ('7' `elem` show x) >> return x)"
+
+	self
+		assert: (CTCategory collection: (1 to: 50)) >>= [ :each | 
+			(CTCategoryCollection guard: (each asString includes: $7))
+			>> (CTCategoryCollection return: each) ]
+		equals: (CTCategory collection: { 7. 17. 27. 37. 47 })
+]
+
+{ #category : #tests }
 CTCategoryTest >> testMonadList [
 
 	"[3,4,5] >>= \x -> [x,-x]"

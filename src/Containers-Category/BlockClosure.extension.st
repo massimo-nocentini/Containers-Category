@@ -1,6 +1,12 @@
 Extension { #name : #BlockClosure }
 
 { #category : #'*Containers-Category' }
+BlockClosure >> >=> aBlock [
+
+	^ [ :x | aBlock ! x >>= self ]
+]
+
+{ #category : #'*Containers-Category' }
 BlockClosure >> currified [
 
 	| size |

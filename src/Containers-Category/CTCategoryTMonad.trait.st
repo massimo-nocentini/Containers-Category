@@ -8,7 +8,15 @@ Trait {
 { #category : #monad }
 CTCategoryTMonad classSide >> fail: aString [
 
-	Error signal: aString
+	self explicitRequirement
+]
+
+{ #category : #'as yet unclassified' }
+CTCategoryTMonad classSide >> guard: aBoolean [
+
+	^ aBoolean
+		  ifTrue: [ self return: nil ]
+		  ifFalse: [ self fail: nil ]
 ]
 
 { #category : #monad }
