@@ -13,13 +13,13 @@ CTCategoryMaybeJust >> <*> functorJust [
 { #category : #monad }
 CTCategoryMaybeJust >> >>= aBlock [
 
-	^ aBlock ! self argument
+	^ aBlock cull: self argument cull: self
 ]
 
 { #category : #'accessing - structure variables' }
 CTCategoryMaybeJust >> fmap: aBlock [
 
-	^ self class on: (aBlock value: self argument)
+	^ self class on: (aBlock cull: self argument cull: self)
 ]
 
 { #category : #'as yet unclassified' }

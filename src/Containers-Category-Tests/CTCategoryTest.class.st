@@ -276,9 +276,9 @@ CTCategoryTest >> testMonadGuardInBind [
 	"[1..50] >>= (\x -> guard ('7' `elem` show x) >> return x)"
 
 	self
-		assert: (1 to: 50) asCollectionCategory >>= [ :each | 
-			(CTCategory collection new guard: (each asString includes: $7))
-			>> (CTCategory collection new return: each) ]
+		assert: (1 to: 50) asCollectionCategory >>= [ :each :category | 
+			(category guard: (each asString includes: $7))
+			>> (category return: each) ]
 		equals: { 7. 17. 27. 37. 47 } asCollectionCategory
 ]
 
@@ -301,8 +301,9 @@ CTCategoryTest >> testMonadList [
 	"[1,2] >>= \n -> ['a','b'] >>= \ch -> return (n, ch)"
 	self
 		assert: { 1. 2 } asCollectionCategory >>= [ :n | 
-			{ $a. $b } asCollectionCategory >>= [ :char | 
-			CTCategory collection new return: (Array with: n with: char) ] ]
+			{ $a. $b } asCollectionCategory
+			>>= [ :char :category | 
+			category return: (Array with: n with: char) ] ]
 		equals:
 		#( #( 1 $a ) #( 1 $b ) #( 2 $a ) #( 2 $b ) ) asCollectionCategory
 ]
@@ -314,13 +315,12 @@ CTCategoryTest >> testMonadMaybe [
 
 	self
 		assert:
-		9 asJustMaybeCategory
-		>>= [ :x | CTCategory maybe new return: x * 10 ]
+		9 asJustMaybeCategory >>= [ :x :category | category return: x * 10 ]
 		equals: (9 * 10) asJustMaybeCategory.
 
 	self
 		assert:
-		CTCategory nothing >>= [ :x | CTCategory maybe new return: x * 10 ]
+		CTCategory nothing >>= [ :x :category | category return: x * 10 ]
 		equals: CTCategory maybe nothing
 ]
 

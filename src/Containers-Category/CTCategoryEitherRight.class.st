@@ -7,5 +7,5 @@ Class {
 { #category : #'accessing - structure variables' }
 CTCategoryEitherRight >> fmap: aBlock [
 
-	^ self class on: (aBlock value: self argument)
+	^ self class on: (aBlock cull: self argument cull: self)
 ]

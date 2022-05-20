@@ -38,12 +38,24 @@ BlockClosure class >> currify: aBlock numArgs: n [
 { #category : #'*Containers-Category' }
 BlockClosure class >> currify: aBlock numArgs: n argsBlock: argsBlock [
 
+	^ self
+		  currify: aBlock
+		  numArgs: n
+		  argsBlock: argsBlock
+		  init: nil
+]
+
+{ #category : #'*Containers-Category' }
+BlockClosure class >> currify: aBlock numArgs: n argsBlock: argsBlock init: init [
+
 	^ n
-		  ifZero: [ aBlock valueWithArguments: (argsBlock value: nil) ]
+		  ifZero: [ 
+		  aBlock valueWithEnoughArguments: (argsBlock value: init) ]
 		  ifNotZero: [ 
 			  [ :arg | 
 			  self
 				  currify: aBlock
 				  numArgs: n - 1
-				  argsBlock: [ :args | argsBlock value: arg ~~> args ] ] ]
+				  argsBlock: [ :args | argsBlock value: arg ~~> args ]
+				  init: init ] ]
 ]

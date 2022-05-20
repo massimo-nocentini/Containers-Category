@@ -38,7 +38,7 @@ CTCategoryBlock >> fmap: aBlock [
 	^ self class on: [ :object | 
 		  | value |
 		  value := self argument value: object.
-		  aBlock value: value ]
+		  aBlock cull: value cull: self ]
 ]
 
 { #category : #applicative }

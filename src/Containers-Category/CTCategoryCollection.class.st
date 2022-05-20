@@ -45,7 +45,8 @@ CTCategoryCollection >> fail: aString [
 { #category : #functor }
 CTCategoryCollection >> fmap: aBlock [
 
-	^ self class on: (self argument collect: aBlock)
+	^ self class on:
+		  (self argument collect: [ :each | aBlock cull: each cull: self ])
 ]
 
 { #category : #monoid }
