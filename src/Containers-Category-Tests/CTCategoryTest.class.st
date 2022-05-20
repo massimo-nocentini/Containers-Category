@@ -8,6 +8,17 @@ Class {
 }
 
 { #category : #tests }
+CTCategoryTest >> addDrinkWithPriceWriter: x [
+
+	^ x = 'beans'
+		  ifTrue: [ 'milk' asWriterCategory: 25 asSumNumberCategory ]
+		  ifFalse: [ 
+			  x = 'jerky'
+				  ifTrue: [ 'whiskey' asWriterCategory: 99 asSumNumberCategory ]
+				  ifFalse: [ 'beer' asWriterCategory: 30 asSumNumberCategory ] ]
+]
+
+{ #category : #tests }
 CTCategoryTest >> testApplicativeBlock [
 
 	"(+) <$> (+3) <*> (*100) $ 5"
@@ -378,21 +389,40 @@ CTCategoryTest >> testMonadWithGotNumberStringWriter [
 
 	self
 		assert: (self withGotNumberStringWriter: 3) >>= [ :x | 
-			(self withGotNumberStringWriter: 5)
-			>>= [ :y :category | category return: x * y ] ]
+			(self withGotNumberStringWriter: 5) >>= [ :y :category | 
+			(category tell: { 'Gonna multiply these two' } asCollectionCategory)
+			>>= [ :shouldBeNil | 
+				self assert: shouldBeNil equals: nil.
+				category return: x * y ] ] ]
 		equals: (15 asWriterCategory:
-				 { 'got number: 3'. 'got number: 5' } asCollectionCategory)
+				 { 'got number: 3'. 'got number: 5'. 'Gonna multiply these two' }
+					 asCollectionCategory)
 ]
 
 { #category : #tests }
 CTCategoryTest >> testMonadWriter [
 
-	"runWriter (return 3 :: Writer (Sum Int) Int)"
+	"(""dogmeat"", Sum 5) `applyLog` addDrink `applyLog` addDrink"
+
+	self
+		assert: ('dogmeat' asWriterCategory: 5 asSumNumberCategory)
+			>>= [ :x | self addDrinkWithPriceWriter: x ]
+			>>= [ :x | self addDrinkWithPriceWriter: x ]
+		equals: ('beer' asWriterCategory: 65 asSumNumberCategory)
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadWriterGCD [
 
 	self
 		assert:
-		((CTCategory writer on: CTCategory number product new) return: 3)
-		equals: nil asJustMaybeCategory
+			(897542437 -> 854797 asWriterCategory: {  } asCollectionCategory)
+			>>= [ :anAssoc :category | 
+				self withWriter: anAssoc key gcd: anAssoc value category: category ]
+		equals: (1 asWriterCategory:
+				 { '897542437 mod: 854797 = 5587'. '854797 mod: 5587 = 5573'.
+				 '5587 mod: 5573 = 14'. '5573 mod: 14 = 1'. '14 mod: 1 = 0'.
+				 'Finished with: 1' } asCollectionCategory)
 ]
 
 { #category : #tests }
@@ -474,4 +504,32 @@ CTCategoryTest >> withGotNumberStringWriter: x [
 
 	^ x asWriterCategory:
 		  { ('got number: ' , x asString) } asCollectionCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> withWriter: a gcd: b category: category [
+
+	"
+gcd' :: Int -> Int -> Writer [String] Int
+gcd' a b
+    | b == 0 = do
+        tell [""Finished with "" ++ show a]
+        return a
+    | otherwise = do
+        tell [show a ++ "" mod "" ++ show b ++ "" = "" ++ show (a `mod` b)]
+        gcd' b (a `mod` b)
+"
+
+	^ b = 0
+		  ifTrue: [ 
+			  (category tell:
+				   { ('Finished with: ' , a asString) } asCollectionCategory)
+			  >>= [ :_ :c | c return: a ] ]
+		  ifFalse: [ 
+			  | mod |
+			  mod := a rem: b.
+			  (category tell:
+				   { (a asString , ' mod: ' , b asString , ' = ' , mod asString) }
+					   asCollectionCategory)
+			  >>= [ :_ :c | self withWriter: b gcd: mod category: c ] ]
 ]
