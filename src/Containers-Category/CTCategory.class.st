@@ -46,11 +46,9 @@ CTCategory class >> on: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-CTCategory class >> writer: aMonoid [
+CTCategory class >> writer [
 
-	^ CTCategoryWriter new
-		  log: aMonoid;
-		  yourself
+	^ CTCategoryWriter
 ]
 
 { #category : #comparing }

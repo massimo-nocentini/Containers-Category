@@ -17,6 +17,16 @@ CTCategoryWriter class >> on: aMonoid [
 		  yourself
 ]
 
+{ #category : #monad }
+CTCategoryWriter >> >>= aBlock [
+
+	| aWriterMonad |
+	aWriterMonad := aBlock cull: self argument cull: self.
+
+	^ (self class on: (self log mappend: aWriterMonad log)) on:
+		  aWriterMonad argument
+]
+
 { #category : #accessing }
 CTCategoryWriter >> log [
 
@@ -27,4 +37,10 @@ CTCategoryWriter >> log [
 CTCategoryWriter >> log: anObject [
 
 	log := anObject
+]
+
+{ #category : #monad }
+CTCategoryWriter >> return: anObject [
+
+	^ (self class on: log mempty) on: anObject
 ]

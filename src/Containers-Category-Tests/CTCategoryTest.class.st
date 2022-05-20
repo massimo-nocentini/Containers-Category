@@ -374,6 +374,28 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testMonadWithGotNumberStringWriter [
+
+	self
+		assert: (self withGotNumberStringWriter: 3) >>= [ :x | 
+			(self withGotNumberStringWriter: 5)
+			>>= [ :y :category | category return: x * y ] ]
+		equals: (15 asWriterCategory:
+				 { 'got number: 3'. 'got number: 5' } asCollectionCategory)
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadWriter [
+
+	"runWriter (return 3 :: Writer (Sum Int) Int)"
+
+	self
+		assert:
+		((CTCategory writer on: CTCategory number product new) return: 3)
+		equals: nil asJustMaybeCategory
+]
+
+{ #category : #tests }
 CTCategoryTest >> testMonoidmappendCollection [
 
 	"[1,2,3] `mappend` [4,5,6]"
@@ -445,4 +467,11 @@ CTCategoryTest >> testMonoidmconcatProduct [
 		assert: (CTCategory number product new mconcat:
 				 ({ 3. 4. 2 } collect: [ :each | each asProductNumberCategory ]))
 		equals: (3 * 4 * 2) asProductNumberCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> withGotNumberStringWriter: x [
+
+	^ x asWriterCategory:
+		  { ('got number: ' , x asString) } asCollectionCategory
 ]
