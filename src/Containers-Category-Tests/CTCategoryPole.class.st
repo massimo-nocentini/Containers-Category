@@ -79,8 +79,8 @@ CTCategoryPole >> maybeLandLeft: n [
 	l := self left + n.
 
 	^ (l - self right) abs < 4
-		  ifTrue: [ CTCategory just: (self landLeft: n) ]
-		  ifFalse: [ CTCategory nothing ]
+		  ifTrue: [ (self landLeft: n) asJustMaybeCategory ]
+		  ifFalse: [ CTCategory maybe nothing ]
 ]
 
 { #category : #initialization }
@@ -90,8 +90,8 @@ CTCategoryPole >> maybeLandRight: n [
 	r := self right + n.
 
 	^ (self left - r) abs < 4
-		  ifTrue: [ CTCategory just: (self landRight: n) ]
-		  ifFalse: [ CTCategory nothing ]
+		  ifTrue: [ (self landRight: n) asJustMaybeCategory ]
+		  ifFalse: [ CTCategory maybe nothing ]
 ]
 
 { #category : #accessing }

@@ -1,63 +1,49 @@
 Class {
 	#name : #CTCategoryMaybe,
-	#superclass : #Object,
+	#superclass : #CTCategory,
 	#traits : 'CTCategoryTMonad + CTCategoryTMonoid',
 	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonoid classTrait',
-	#classVars : [
-		'Nothing'
-	],
 	#category : #'Containers-Category'
 }
 
-{ #category : #monad }
-CTCategoryMaybe class >> fail: aString [
+{ #category : #factory }
+CTCategoryMaybe class >> just: anObject [
 
-	^ self nothing
+	^ CTCategoryMaybeJust on: anObject
 ]
 
-{ #category : #'class initialization' }
-CTCategoryMaybe class >> initialize [
-
-	Nothing := CTCategoryMaybeNothing new
-]
-
-{ #category : #monoid }
-CTCategoryMaybe class >> mempty [
-
-	^ self nothing
-]
-
-{ #category : #accessing }
+{ #category : #factory }
 CTCategoryMaybe class >> nothing [
 
-	^ Nothing
-]
-
-{ #category : #applicative }
-CTCategoryMaybe class >> pure: object [
-
-	^ CTCategory just: object
+	^ CTCategoryMaybeNothing on: nil
 ]
 
 { #category : #monad }
-CTCategoryMaybe class >> return: anObject [
+CTCategoryMaybe >> fail: aString [
 
-	^ self pure: anObject
-]
-
-{ #category : #comparing }
-CTCategoryMaybe >> = anObject [
-
-	^ self class = anObject class
-]
-
-{ #category : #comparing }
-CTCategoryMaybe >> hash [
-
-	^ self class hash
+	^ self class nothing
 ]
 
 { #category : #controlling }
 CTCategoryMaybe >> ifNothing: nBlock ifJust: jBlock [
+
 	self subclassResponsibility
+]
+
+{ #category : #monoid }
+CTCategoryMaybe >> mempty [
+
+	^ self class nothing
+]
+
+{ #category : #applicative }
+CTCategoryMaybe >> pure: object [
+
+	^ object asJustMaybeCategory
+]
+
+{ #category : #monad }
+CTCategoryMaybe >> return: anObject [
+
+	^ self pure: anObject
 ]

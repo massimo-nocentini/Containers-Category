@@ -7,7 +7,7 @@ Class {
 { #category : #'accessing - structure variables' }
 CTCategoryMaybeNothing >> <*> functorJust [
 
-	^ self class new
+	^ self
 ]
 
 { #category : #monad }
@@ -19,11 +19,12 @@ CTCategoryMaybeNothing >> >>= aBlock [
 { #category : #'accessing - structure variables' }
 CTCategoryMaybeNothing >> fmap: aBlock [
 
-	^ self class new
+	^ self
 ]
 
 { #category : #'as yet unclassified' }
 CTCategoryMaybeNothing >> ifNothing: nBlock ifJust: jBlock [
+
 	^ nBlock value
 ]
 

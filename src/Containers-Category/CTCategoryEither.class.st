@@ -7,29 +7,8 @@ data Either a b = Left a | Right b
 "
 Class {
 	#name : #CTCategoryEither,
-	#superclass : #Object,
+	#superclass : #CTCategory,
 	#traits : 'CTCategoryTFunctor',
 	#classTraits : 'CTCategoryTFunctor classTrait',
-	#instVars : [
-		'content'
-	],
 	#category : #'Containers-Category'
 }
-
-{ #category : #accessing }
-CTCategoryEither >> content [
-
-	^ content
-]
-
-{ #category : #accessing }
-CTCategoryEither >> content: anObject [
-
-	content := anObject
-]
-
-{ #category : #functor }
-CTCategoryEither >> fmap: aBlock [
-
-	self subclassResponsibility
-]

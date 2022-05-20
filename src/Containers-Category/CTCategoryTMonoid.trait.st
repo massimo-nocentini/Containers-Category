@@ -4,7 +4,13 @@ Trait {
 }
 
 { #category : #monoid }
-CTCategoryTMonoid classSide >> mconcat: aCollectionOfMonoids [
+CTCategoryTMonoid >> mappend: aMonoid [
+
+	self explicitRequirement
+]
+
+{ #category : #monoid }
+CTCategoryTMonoid >> mconcat: aCollectionOfMonoids [
 
 	^ aCollectionOfMonoids
 		  foldr: [ :each :acc | each mappend: acc ]
@@ -12,13 +18,7 @@ CTCategoryTMonoid classSide >> mconcat: aCollectionOfMonoids [
 ]
 
 { #category : #monoid }
-CTCategoryTMonoid classSide >> mempty [
-
-	self explicitRequirement
-]
-
-{ #category : #monoid }
-CTCategoryTMonoid >> mappend: aMonoid [
+CTCategoryTMonoid >> mempty [
 
 	self explicitRequirement
 ]

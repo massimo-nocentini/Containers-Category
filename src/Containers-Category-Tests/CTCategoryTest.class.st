@@ -12,19 +12,21 @@ CTCategoryTest >> testApplicativeBlock [
 
 	"(+) <$> (+3) <*> (*100) $ 5"
 
-	| blockCategory |
-	blockCategory := (CTCategory block: [ :i | i * 100 ])
+	| anApplicative category |
+	category := CTCategory block.
+
+	anApplicative := (category on: [ :i | i * 100 ])
 	                 <*>
-	                 ((CTCategory block: [ :i | i + 3 ])
-	                  <!> [ :i :j | i + j ]).
+	                 ((category on: [ :i | i + 3 ]) <!> [ :i :j | i + j ]).
 
-	self assert: blockCategory block ! 5 equals: 508.
+	self assert: anApplicative argument ! 5 equals: 508.
 
-	blockCategory := (CTCategory block: [ :i | i * 100 ])
-	                 <*> ((CTCategory block: [ :i | i + 3 ])
-		                  <!> [ :i :j | Array with: i with: j ]).
+	anApplicative := (category on: [ :i | i * 100 ])
+	                 <*>
+	                 ((category on: [ :i | i + 3 ])
+	                  <!> [ :i :j | Array with: i with: j ]).
 
-	self assert: blockCategory block ! 5 equals: { 8. 500 }
+	self assert: anApplicative argument ! 5 equals: { 8. 500 }
 ]
 
 { #category : #tests }
@@ -32,13 +34,16 @@ CTCategoryTest >> testApplicativeBlockThreeArgs [
 
 	"(\x y z -> [x,y,z]) <$> (+3) <*> (*2) <*> (/2) $ 5"
 
-	| blockCategory |
-	blockCategory := (CTCategory block: [ :i | i / 2 ])
-	                 <*> ((CTCategory block: [ :i | i * 2 ])
-		                  <*> ((CTCategory block: [ :i | i + 3 ])
+	| anApplicative category |
+	category := CTCategory block.
+
+	anApplicative := (category on: [ :i | i / 2 ])
+	                 <*>
+		                 ((category on: [ :i | i * 2 ])
+		                  <*> ((category on: [ :i | i + 3 ])
 			                   <!> [ :i :j :k | Array with: i with: j with: k ])).
 
-	self assert: blockCategory block ! 5 equals: { 
+	self assert: anApplicative argument ! 5 equals: { 
 			8.
 			10.
 			(5 / 2) }
@@ -49,18 +54,19 @@ CTCategoryTest >> testApplicativeCollectionAppendStrings [
 
 	"(++) <$> ['ha','heh','hmm'] <*> ['?','!','.']"
 
+	| category |
+	category := CTCategory collection.
+
 	self
-		assert: (CTCategory collection: { '?'. '!'. '.' })
-			<*>
-			((CTCategory collection: { 'ha'. 'heh'. 'hmm' })
-			 <!> [ :i :j | i , j ])
-		equals: (CTCategory collection:
+		assert: (category on: { '?'. '!'. '.' })
+			<*> ((category on: { 'ha'. 'heh'. 'hmm' }) <!> [ :i :j | i , j ])
+		equals: (category on:
 				 #( 'ha?' 'ha!' 'ha.' 'heh?' 'heh!' 'heh.' 'hmm?' 'hmm!' 'hmm.' )).
 
 	self
-		assert: (CTCategory collection: { '?'. '!'. '.' })
-			<*> ((CTCategory collection: { 'ha'. 'heh'. 'hmm' }) <!> #,)
-		equals: (CTCategory collection:
+		assert: (category on: { '?'. '!'. '.' })
+			<*> ((category on: { 'ha'. 'heh'. 'hmm' }) <!> #,)
+		equals: (category on:
 				 #( 'ha?' 'ha!' 'ha.' 'heh?' 'heh!' 'heh.' 'hmm?' 'hmm!' 'hmm.' ))
 ]
 
@@ -70,13 +76,11 @@ CTCategoryTest >> testApplicativeCollectionOneArgBlocks [
 	"[(*0),(+100),(^2)] <*> [1,2,3]"
 
 	self
-		assert:
-			(CTCategory collection: { 1. 2. 3 })
-			<*> (CTCategory collection: { 
-						 [ :i | i * 0 ].
-						 [ :i | i + 100 ].
-						 [ :i | i raisedTo: 2 ] })
-		equals: (CTCategory collection: { 0. 0. 0. 101. 102. 103. 1. 4. 9 })
+		assert: { 1. 2. 3 } asCollectionCategory <*> { 
+				[ :i | i * 0 ].
+				[ :i | i + 100 ].
+				[ :i | i raisedTo: 2 ] } asCollectionCategory
+		equals: { 0. 0. 0. 101. 102. 103. 1. 4. 9 } asCollectionCategory
 ]
 
 { #category : #tests }
@@ -85,9 +89,9 @@ CTCategoryTest >> testApplicativeCollectionTwoArgsBlock [
 	"(*) <$> [2,5,10] <*> [8,10,11]"
 
 	self
-		assert: (CTCategory collection: { 8. 10. 11 })
-			<*> ((CTCategory collection: { 2. 5. 10 }) <!> [ :i :j | i * j ])
-		equals: (CTCategory collection: #( 16 20 22 40 50 55 80 100 110 ))
+		assert: { 8. 10. 11 } asCollectionCategory
+			<*> ({ 2. 5. 10 } asCollectionCategory <!> [ :i :j | i * j ])
+		equals: #( 16 20 22 40 50 55 80 100 110 ) asCollectionCategory
 ]
 
 { #category : #tests }
@@ -96,14 +100,14 @@ CTCategoryTest >> testApplicativeCollectionTwoArgsBlocks [
 	"[(+),(*)] <*> [1,2] <*> [3,4]"
 
 	| blocks |
-	blocks := CTCategory collection: { 
-			          [ :i :j | i + j ].
-			          [ :i :j | i * j ] }.
+	blocks := { 
+		          [ :i :j | i + j ].
+		          [ :i :j | i * j ] } asCollectionCategory.
 
 	self
-		assert: (CTCategory collection: { 3. 4 })
-			<*> ((CTCategory collection: { 1. 2 }) <*> blocks)
-		equals: (CTCategory collection: { 4. 5. 5. 6. 3. 4. 6. 8 })
+		assert: { 3. 4 } asCollectionCategory
+			<*> ({ 1. 2 } asCollectionCategory <*> blocks)
+		equals: { 4. 5. 5. 6. 3. 4. 6. 8 } asCollectionCategory
 ]
 
 { #category : #tests }
@@ -112,13 +116,13 @@ CTCategoryTest >> testApplicativeLiftA2ApplicativeMaybeCollection [
 	"liftA2 (:) (Just 3) (Just [4])"
 
 	| aJust |
-	aJust := (CTCategory just: 3)
-		         applicative: (CTCategory just: 4 ~~> nil)
+	aJust := 3 asJustMaybeCategory
+		         applicative: (4 ~~> nil) asJustMaybeCategory
 		         lift: [ :obj :aLink | obj ~~> aLink ].
 
 	self
-		assert: aJust content asArray
-		equals: (CTCategory just: 3 ~~> (4 ~~> nil)) content asArray
+		assert: aJust argument asArray
+		equals: (3 ~~> (4 ~~> nil)) asJustMaybeCategory argument asArray
 ]
 
 { #category : #tests }
@@ -127,10 +131,11 @@ CTCategoryTest >> testApplicativeSequence [
 	"sequenceA [Just 3, Just 2, Just 1]"
 
 	self
-		assert: (CTCategoryMaybe sequenceA: (CTCategory just: 3)
-				 ~~> ((CTCategory just: 2) ~~> ((CTCategory just: 1) ~~> nil)))
-				content asArray
-		equals: (CTCategory just: 3 ~~> (2 ~~> (1 ~~> nil))) content asArray
+		assert: (CTCategory maybe new sequenceA: 3 asJustMaybeCategory
+				 ~~> (2 asJustMaybeCategory ~~> (1 asJustMaybeCategory ~~> nil)))
+				argument asArray
+		equals:
+		(3 ~~> (2 ~~> (1 ~~> nil))) asJustMaybeCategory argument asArray
 ]
 
 { #category : #tests }
@@ -139,11 +144,11 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableJusts [
 	"sequenceA [Just 3, Just 2, Just 1]"
 
 	self
-		assert: (CTCategoryMaybe sequenceAsequenceable: { 
-					 (CTCategory just: 3).
-					 (CTCategory just: 2).
-					 (CTCategory just: 1) })
-		equals: (CTCategory just: { 3. 2. 1 })
+		assert: (CTCategory maybe new sequenceAsequenceable: { 
+					 3 asJustMaybeCategory.
+					 2 asJustMaybeCategory.
+					 1 asJustMaybeCategory })
+		equals: { 3. 2. 1 } asJustMaybeCategory
 ]
 
 { #category : #tests }
@@ -152,16 +157,17 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableLists [
 	"sequenceA [[1,2,3],[4,5,6]]"
 
 	self
-		assert: (CTCategoryCollection sequenceAsequenceable: { 
-					 (CTCategory collection: { 1. 2. 3 }).
-					 (CTCategory collection: { 4. 5. 6. 7 }).
-					 (CTCategory collection: { 8. 9 }) })
-		equals: (CTCategory collection:
-				 #( #( 1 4 8 ) #( 1 4 9 ) #( 1 5 8 ) #( 1 5 9 ) #( 1 6 8 )
-				    #( 1 6 9 ) #( 1 7 8 ) #( 1 7 9 ) #( 2 4 8 ) #( 2 4 9 )
-				    #( 2 5 8 ) #( 2 5 9 ) #( 2 6 8 ) #( 2 6 9 ) #( 2 7 8 )
-				    #( 2 7 9 ) #( 3 4 8 ) #( 3 4 9 ) #( 3 5 8 ) #( 3 5 9 )
-				    #( 3 6 8 ) #( 3 6 9 ) #( 3 7 8 ) #( 3 7 9 ) ))
+		assert: (CTCategory collection new sequenceAsequenceable: ({ 
+					  { 1. 2. 3 }.
+					  { 4. 5. 6. 7 }.
+					  { 8. 9 } } collect: [ :each | each asCollectionCategory ]))
+		equals:
+			#( #( 1 4 8 ) #( 1 4 9 ) #( 1 5 8 ) #( 1 5 9 ) #( 1 6 8 )
+			   #( 1 6 9 ) #( 1 7 8 ) #( 1 7 9 ) #( 2 4 8 ) #( 2 4 9 )
+			   #( 2 5 8 ) #( 2 5 9 ) #( 2 6 8 ) #( 2 6 9 ) #( 2 7 8 )
+			   #( 2 7 9 ) #( 3 4 8 ) #( 3 4 9 ) #( 3 5 8 ) #( 3 5 9 )
+			   #( 3 6 8 ) #( 3 6 9 ) #( 3 7 8 ) #( 3 7 9 ) )
+				asCollectionCategory
 ]
 
 { #category : #tests }
@@ -170,12 +176,12 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableListsWithEmpty [
 	"sequenceA [[1,2,3],[4,5,6]]"
 
 	self
-		assert: (CTCategoryCollection sequenceAsequenceable: { 
-					 (CTCategory collection: { 1. 2. 3 }).
-					 (CTCategory collection: { 4. 5. 6. 7 }).
-					 (CTCategory collection: { 8. 9 }).
-					 (CTCategory collection: {  }) })
-		equals: (CTCategory collection: {  })
+		assert: (CTCategory collection new sequenceAsequenceable: ({ 
+					  { 1. 2. 3 }.
+					  { 4. 5. 6. 7 }.
+					  { 8. 9 }.
+					  {  } } collect: [ :each | each asCollectionCategory ]))
+		equals: {  } asCollectionCategory
 ]
 
 { #category : #tests }
@@ -183,11 +189,14 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableUnaryBlocks [
 
 	"sequenceA [(+3),(+2),(+1)] 3"
 
+	| category |
+	category := CTCategory block.
+
 	self
-		assert: (CTCategoryBlock sequenceAsequenceable: { 
-					 (CTCategory block: [ :i | i + 3 ]).
-					 (CTCategory block: [ :i | i + 2 ]).
-					 (CTCategory block: [ :i | i + 1 ]) }) block ! 3
+		assert: (category new sequenceAsequenceable: { 
+					 (category on: [ :i | i + 3 ]).
+					 (category on: [ :i | i + 2 ]).
+					 (category on: [ :i | i + 1 ]) }) argument ! 3
 		equals: { 6. 5. 4 }
 ]
 
@@ -197,10 +206,10 @@ CTCategoryTest >> testApplicativeSequenceLists [
 	"sequenceA [[1,2,3],[4,5,6]]"
 
 	self
-		assert: ((CTCategoryCollection sequenceA: { 
-					  (CTCategory collection: { 1. 2. 3 }).
-					  (CTCategory collection: { 4. 5. 6 }) } asLinkedList firstLink)
-				 collection collect: #asArray)
+		assert: ((CTCategory collection new sequenceA: { 
+					  { 1. 2. 3 } asCollectionCategory.
+					  { 4. 5. 6 } asCollectionCategory } asLinkedList firstLink)
+				 argument collect: #asArray)
 		equals:
 			#( #( 1 4 ) #( 1 5 ) #( 1 6 ) #( 2 4 ) #( 2 5 ) #( 2 6 ) #( 3 4 )
 			   #( 3 5 ) #( 3 6 ) )
@@ -219,9 +228,10 @@ foo = Just 3   >>= (\x ->
 	"
 
 	self
-		assert: (CTCategory just: 3) >>= [ :x | 
-			(CTCategory just: '!') >>= [ :y | CTCategory just: x asString , y ] ]
-		equals: (CTCategory just: '3!')
+		assert: 3 asJustMaybeCategory >>= [ :x | 
+			'!' asJustMaybeCategory
+			>>= [ :y | (x asString , y) asJustMaybeCategory ] ]
+		equals: '3!' asJustMaybeCategory
 ]
 
 { #category : #tests }
@@ -236,18 +246,18 @@ ghci> h 3
 
 	| f g |
 	f := [ :x | 
-	     CTCategory collection: { 
-			     x.
-			     x negated } ].
+	     { 
+		     x.
+		     x negated } asCollectionCategory ].
 
 	g := [ :x | 
-	     CTCategory collection: { 
-			     (x * 3).
-			     (x * 2) } ].
+	     { 
+		     (x * 3).
+		     (x * 2) } asCollectionCategory ].
 
 	self
 		assert: f >=> g ! 3
-		equals: (CTCategory collection: { 9. -9. 6. -6 })
+		equals: { 9. -9. 6. -6 } asCollectionCategory
 ]
 
 { #category : #tests }
@@ -256,8 +266,8 @@ CTCategoryTest >> testMonadGuard [
 	"guard (5 > 2) :: Maybe ()"
 
 	self
-		assert: (CTCategoryMaybe guard: 5 > 2)
-		equals: (CTCategory just: nil)
+		assert: (CTCategory maybe new guard: 5 > 2)
+		equals: nil asJustMaybeCategory
 ]
 
 { #category : #tests }
@@ -266,10 +276,10 @@ CTCategoryTest >> testMonadGuardInBind [
 	"[1..50] >>= (\x -> guard ('7' `elem` show x) >> return x)"
 
 	self
-		assert: (CTCategory collection: (1 to: 50)) >>= [ :each | 
-			(CTCategoryCollection guard: (each asString includes: $7))
-			>> (CTCategoryCollection return: each) ]
-		equals: (CTCategory collection: { 7. 17. 27. 37. 47 })
+		assert: (1 to: 50) asCollectionCategory >>= [ :each | 
+			(CTCategory collection new guard: (each asString includes: $7))
+			>> (CTCategory collection new return: each) ]
+		equals: { 7. 17. 27. 37. 47 } asCollectionCategory
 ]
 
 { #category : #tests }
@@ -278,24 +288,23 @@ CTCategoryTest >> testMonadList [
 	"[3,4,5] >>= \x -> [x,-x]"
 
 	self
-		assert: (CTCategory collection: { 3. 4. 5 })
-			>>= [ :x | CTCategory collection: (Array with: x with: x negated) ]
-		equals: (CTCategory collection: { 3. -3. 4. -4. 5. -5 }).
+		assert: { 3. 4. 5 } asCollectionCategory
+			>>= [ :x | (Array with: x with: x negated) asCollectionCategory ]
+		equals: { 3. -3. 4. -4. 5. -5 } asCollectionCategory.
 
 	"[1,2,3] >>= \x -> []"
 	self
-		assert: (CTCategory collection: { 3. 4. 5 })
-			>>= [ :x | CTCategory collection: {  } ]
-		equals: (CTCategory collection: {  }).
+		assert: { 3. 4. 5 } asCollectionCategory
+			>>= [ :x | {  } asCollectionCategory ]
+		equals: {  } asCollectionCategory.
 
 	"[1,2] >>= \n -> ['a','b'] >>= \ch -> return (n, ch)"
 	self
-		assert: (CTCategory collection: { 1. 2 }) >>= [ :n | 
-			(CTCategory collection: { $a. $b })
-			>>= [ :char | 
-			CTCategoryCollection return: (Array with: n with: char) ] ]
+		assert: { 1. 2 } asCollectionCategory >>= [ :n | 
+			{ $a. $b } asCollectionCategory >>= [ :char | 
+			CTCategory collection new return: (Array with: n with: char) ] ]
 		equals:
-		(CTCategory collection: #( #( 1 $a ) #( 1 $b ) #( 2 $a ) #( 2 $b ) ))
+		#( #( 1 $a ) #( 1 $b ) #( 2 $a ) #( 2 $b ) ) asCollectionCategory
 ]
 
 { #category : #tests }
@@ -305,13 +314,14 @@ CTCategoryTest >> testMonadMaybe [
 
 	self
 		assert:
-		(CTCategory just: 9) >>= [ :x | CTCategoryMaybe return: x * 10 ]
-		equals: (CTCategory just: 9 * 10).
+		9 asJustMaybeCategory
+		>>= [ :x | CTCategory maybe new return: x * 10 ]
+		equals: (9 * 10) asJustMaybeCategory.
 
 	self
 		assert:
-		CTCategory nothing >>= [ :x | CTCategoryMaybe return: x * 10 ]
-		equals: CTCategory nothing
+		CTCategory nothing >>= [ :x | CTCategory maybe new return: x * 10 ]
+		equals: CTCategory maybe nothing
 ]
 
 { #category : #tests }
@@ -336,12 +346,13 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 	"return (0, 0) >>= landRight 2 >>= landLeft 2 >>= landRight 2"
 	self
 		assert:
-			(CTCategoryMaybe return: pole) >>= [ :p | p maybeLandRight: 2 ]
-			>>= [ :p | p maybeLandLeft: 2 ] >>= [ :p | p maybeLandRight: 2 ]
-		equals: (CTCategory just: (CTCategoryPole new
-					  left: 2;
-					  right: 4;
-					  yourself)).
+			(CTCategory maybe new return: pole)
+			>>= [ :p | p maybeLandRight: 2 ] >>= [ :p | p maybeLandLeft: 2 ]
+			>>= [ :p | p maybeLandRight: 2 ]
+		equals: (CTCategoryPole new
+				 left: 2;
+				 right: 4;
+				 yourself) asJustMaybeCategory.
 
 	self
 		assert: (pole -! [ :p | p landLeft: 1 ] -! [ :p | p landRight: 4 ]
@@ -350,14 +361,14 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 
 	self
 		assert:
-			(CTCategoryMaybe return: pole) >>= [ :p | p maybeLandLeft: 1 ]
+			(CTCategory maybe new return: pole) >>= [ :p | p maybeLandLeft: 1 ]
 			>>= [ :p | p maybeLandRight: 4 ] >>= [ :p | p maybeLandLeft: -1 ]
 			>>= [ :p | p maybeLandRight: -2 ]
-		equals: CTCategory nothing.
+		equals: CTCategory maybe nothing.
 
 	self
 		assert:
-			(CTCategoryMaybe return: pole) >>= [ :p | p maybeLandLeft: 1 ]
+			(CTCategory maybe new return: pole) >>= [ :p | p maybeLandLeft: 1 ]
 			>>= [ :p | p maybeBanana ] >>= [ :p | p maybeLandRight: 1 ]
 		equals: CTCategory nothing
 ]
@@ -368,9 +379,9 @@ CTCategoryTest >> testMonoidmappendCollection [
 	"[1,2,3] `mappend` [4,5,6]"
 
 	self
-		assert: ((CTCategory collection: { 1. 2. 3 }) mappend:
-				 (CTCategory collection: { 4. 5. 6 }))
-		equals: (CTCategory collection: { 1. 2. 3. 4. 5. 6 })
+		assert: ({ 1. 2. 3 } asCollectionCategory mappend:
+				 { 4. 5. 6 } asCollectionCategory)
+		equals: { 1. 2. 3. 4. 5. 6 } asCollectionCategory
 ]
 
 { #category : #tests }
@@ -379,9 +390,9 @@ CTCategoryTest >> testMonoidmappendMaybeProduct [
 	"Just (Product 3) `mappend` Just (Product 4)"
 
 	self
-		assert: ((CTCategory just: (CTCategory product: 3)) mappend:
-				 (CTCategory just: (CTCategory product: 9)))
-		equals: (CTCategory just: (CTCategory product: 27))
+		assert: (3 asProductNumberCategory asJustMaybeCategory mappend:
+				 9 asProductNumberCategory asJustMaybeCategory)
+		equals: 27 asProductNumberCategory asJustMaybeCategory
 ]
 
 { #category : #tests }
@@ -390,8 +401,9 @@ CTCategoryTest >> testMonoidmappendProduct [
 	"Product 3 `mappend` Product 9"
 
 	self
-		assert: ((CTCategory product: 3) mappend: (CTCategory product: 9))
-		equals: (CTCategory product: 27)
+		assert:
+		(3 asProductNumberCategory mappend: 9 asProductNumberCategory)
+		equals: 27 asProductNumberCategory
 ]
 
 { #category : #tests }
@@ -400,16 +412,15 @@ CTCategoryTest >> testMonoidmappendStrings [
 	"('one' `mappend` 'two') `mappend` 'tree'"
 
 	self
-		assert: (((CTCategory collection: 'one') mappend:
-				  (CTCategory collection: 'two')) mappend:
-				 (CTCategory collection: 'three'))
-		equals: (CTCategory collection: 'onetwothree').
+		assert:
+			(('one' asCollectionCategory mappend: 'two' asCollectionCategory) 
+				 mappend: 'three' asCollectionCategory)
+		equals: 'onetwothree' asCollectionCategory.
 
 	self
-		assert: ((CTCategory collection: 'one') mappend:
-				 ((CTCategory collection: 'two') mappend:
-					  (CTCategory collection: 'three')))
-		equals: (CTCategory collection: 'onetwothree')
+		assert: ('one' asCollectionCategory mappend:
+				 ('two' asCollectionCategory mappend: 'three' asCollectionCategory))
+		equals: 'onetwothree' asCollectionCategory
 ]
 
 { #category : #tests }
@@ -418,11 +429,11 @@ CTCategoryTest >> testMonoidmconcat [
 	"mconcat [[1,2],[3,6],[9]]"
 
 	self
-		assert: (CTCategoryCollection mconcat: { 
-					 (CTCategory collection: { 1. 2 }).
-					 (CTCategory collection: { 3. 6 }).
-					 (CTCategory collection: { 9 }) })
-		equals: (CTCategory collection: { 1. 2. 3. 6. 9 })
+		assert: (CTCategory collection new mconcat: { 
+					 { 1. 2 } asCollectionCategory.
+					 { 3. 6 } asCollectionCategory.
+					 { 9 } asCollectionCategory })
+		equals: { 1. 2. 3. 6. 9 } asCollectionCategory
 ]
 
 { #category : #tests }
@@ -431,7 +442,7 @@ CTCategoryTest >> testMonoidmconcatProduct [
 	"getProduct . mconcat . map Product $ [3,4,2]"
 
 	self
-		assert: (CTCategoryNumberProduct mconcat:
-				 ({ 3. 4. 2 } collect: [ :each | CTCategory product: each ]))
-		equals: (CTCategory product: 3 * 4 * 2)
+		assert: (CTCategory number product new mconcat:
+				 ({ 3. 4. 2 } collect: [ :each | each asProductNumberCategory ]))
+		equals: (3 * 4 * 2) asProductNumberCategory
 ]

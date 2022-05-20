@@ -1,43 +1,84 @@
 Class {
 	#name : #CTCategory,
 	#superclass : #Object,
+	#instVars : [
+		'argument'
+	],
 	#category : #'Containers-Category'
 }
 
 { #category : #factory }
-CTCategory class >> block: aBlock [
+CTCategory class >> block [
 
-	^ CTCategoryBlock new
-		  block: aBlock currified;
-		  yourself
+	^ CTCategoryBlock
 ]
 
 { #category : #factory }
-CTCategory class >> collection: aCollection [
+CTCategory class >> collection [
 
-	^ CTCategoryCollection new
-		  collection: aCollection;
-		  yourself
+	^ CTCategoryCollection
 ]
 
-{ #category : #factory }
-CTCategory class >> just: anObject [
+{ #category : #'as yet unclassified' }
+CTCategory class >> maybe [
 
-	^ CTCategoryMaybeJust new
-		  content: anObject;
-		  yourself
+	^ CTCategoryMaybe
 ]
 
 { #category : #factory }
 CTCategory class >> nothing [
 
-	^ CTCategoryMaybeNothing new
+	^ CTCategoryMaybe nothing
 ]
 
 { #category : #factory }
-CTCategory class >> product: aNumber [
+CTCategory class >> number [
 
-	^ CTCategoryNumberProduct new
-		  number: aNumber;
+	^ CTCategoryNumber
+]
+
+{ #category : #'instance creation' }
+CTCategory class >> on: anObject [
+
+	^ self new
+		  on: anObject;
 		  yourself
+]
+
+{ #category : #'as yet unclassified' }
+CTCategory class >> writer: aMonoid [
+
+	^ CTCategoryWriter new
+		  log: aMonoid;
+		  yourself
+]
+
+{ #category : #comparing }
+CTCategory >> = anObject [
+
+	"Answer whether the receiver and anObject represent the same object."
+
+	self == anObject ifTrue: [ ^ true ].
+	self class = anObject class ifFalse: [ ^ false ].
+	^ argument = anObject argument
+]
+
+{ #category : #accessing }
+CTCategory >> argument [
+
+	^ argument
+]
+
+{ #category : #comparing }
+CTCategory >> hash [
+
+	"Answer an integer value that is related to the identity of the receiver."
+
+	^ argument hash
+]
+
+{ #category : #'instance creation' }
+CTCategory >> on: anObject [
+
+	argument := anObject
 ]

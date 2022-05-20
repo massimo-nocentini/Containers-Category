@@ -1,47 +1,17 @@
 Class {
 	#name : #CTCategoryCollection,
-	#superclass : #Object,
+	#superclass : #CTCategory,
 	#traits : 'CTCategoryTMonad + CTCategoryTMonoid',
 	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonoid classTrait',
-	#instVars : [
-		'collection'
-	],
 	#category : #'Containers-Category'
 }
-
-{ #category : #monad }
-CTCategoryCollection class >> fail: aString [
-
-	^ self mempty
-]
-
-{ #category : #monoid }
-CTCategoryCollection class >> mempty [
-
-	^ self new
-		  collection: {  };
-		  yourself
-]
-
-{ #category : #applicative }
-CTCategoryCollection class >> pure: object [
-
-	^ self new
-		  collection: (OrderedCollection with: object);
-		  yourself
-]
-
-{ #category : #monad }
-CTCategoryCollection class >> return: anObject [
-
-	^ self pure: anObject
-]
 
 { #category : #applicative }
 CTCategoryCollection >> <*> anApplicativeOfBlocks [
 
-	| array i otherCollection |
-	otherCollection := anApplicativeOfBlocks collection.
+	| array i otherCollection collection |
+	collection := self argument.
+	otherCollection := anApplicativeOfBlocks argument.
 
 	array := Array new: collection size * otherCollection size.
 
@@ -55,57 +25,27 @@ CTCategoryCollection >> <*> anApplicativeOfBlocks [
 			i := i + 1.
 			array at: i put: currified ! eachValue ] ].
 
-	^ self class new
-		  collection: array;
-		  yourself
-]
-
-{ #category : #comparing }
-CTCategoryCollection >> = anObject [
-
-	"Answer whether the receiver and anObject represent the same object."
-
-	self == anObject ifTrue: [ ^ true ].
-	self class = anObject class ifFalse: [ ^ false ].
-	^ collection = anObject collection
+	^ self class on: array
 ]
 
 { #category : #monad }
 CTCategoryCollection >> >>= aBlock [
 
-	^ self class new
-		  collection:
-			  ((self fmap: aBlock) collection flatCollect: [ :each | 
-					   each collection ]);
-		  yourself
+	^ self class on:
+		  ((self fmap: aBlock) argument flatCollect: [ :each | 
+			   each argument ])
 ]
 
-{ #category : #accessing }
-CTCategoryCollection >> collection [
+{ #category : #monad }
+CTCategoryCollection >> fail: aString [
 
-	^ collection
-]
-
-{ #category : #accessing }
-CTCategoryCollection >> collection: anObject [
-
-	collection := anObject
+	^ self mempty
 ]
 
 { #category : #functor }
 CTCategoryCollection >> fmap: aBlock [
 
-	^ self class new
-		  collection: (collection collect: aBlock);
-		  yourself
-]
-
-{ #category : #comparing }
-CTCategoryCollection >> hash [
-
-	"Answer an integer value that is related to the identity of the receiver."
-
-	^ collection hash
+	^ self class on: (self argument collect: aBlock)
 ]
 
 { #category : #monoid }
@@ -119,7 +59,23 @@ CTCategoryCollection >> mappend: aMonoid [
 	
 	"
 
-	^ self class new
-		  collection: collection , aMonoid collection;
-		  yourself
+	^ self class on: self argument , aMonoid argument
+]
+
+{ #category : #monoid }
+CTCategoryCollection >> mempty [
+
+	^ self class on: {  }
+]
+
+{ #category : #applicative }
+CTCategoryCollection >> pure: object [
+
+	^ self class on: { object }
+]
+
+{ #category : #monad }
+CTCategoryCollection >> return: anObject [
+
+	^ self pure: anObject
 ]

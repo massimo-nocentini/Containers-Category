@@ -1,5 +1,5 @@
 Class {
-	#name : #CTCategoryNumberProduct,
+	#name : #CTCategoryNumberSum,
 	#superclass : #CTCategoryNumber,
 	#traits : 'CTCategoryTMonoid',
 	#classTraits : 'CTCategoryTMonoid classTrait',
@@ -7,13 +7,13 @@ Class {
 }
 
 { #category : #monoid }
-CTCategoryNumberProduct >> mappend: aMonoid [
+CTCategoryNumberSum >> mappend: aMonoid [
 
-	^ self class on: self argument * aMonoid argument
+	^ self class on: self argument + aMonoid argument
 ]
 
 { #category : #monoid }
-CTCategoryNumberProduct >> mempty [
+CTCategoryNumberSum >> mempty [
 
-	^ self class on: 1
+	^ self class on: 0
 ]
