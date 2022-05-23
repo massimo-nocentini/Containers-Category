@@ -20,8 +20,11 @@ CTCategoryWriter class >> on: aMonoid [
 { #category : #applicative }
 CTCategoryWriter >> <*> anApplicative [
 
-	^ (anApplicative argument value: self argument) asWriterCategory:
-		  (self log mappend: anApplicative log)
+	| aWriter |
+	aWriter := self fmap: anApplicative argument.
+
+	^ aWriter argument asWriterCategory:
+		  (aWriter log mappend: anApplicative log)
 ]
 
 { #category : #comparing }
@@ -35,17 +38,28 @@ CTCategoryWriter >> = anObject [
 { #category : #monad }
 CTCategoryWriter >> >>= aBlock [
 
-	| aWriterMonad |
+	| aWriterMonad newArgument |
+	"
+
+	(a -> b) -> m a -> m b 
+	m (a -> b) -> m a -> m b
+	(a -> m b) -> m a -> m b
+	
+	"
 	aWriterMonad := aBlock cull: self argument cull: self.
 
-	^ aWriterMonad argument asWriterCategory:
-		  (self log mappend: aWriterMonad log)
+	newArgument := aWriterMonad argument.
+
+	aWriterMonad := [ :arg | newArgument ] asWriterCategory:
+		                aWriterMonad log.
+
+	^ self <*> aWriterMonad
 ]
 
 { #category : #functor }
 CTCategoryWriter >> fmap: aBlock [
 
-	^ (aBlock cull: self argument cull: self) asWriterCategory: self log
+	^ (aBlock value: self argument) asWriterCategory: self log
 ]
 
 { #category : #comparing }
