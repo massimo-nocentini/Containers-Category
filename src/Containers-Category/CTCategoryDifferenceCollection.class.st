@@ -22,5 +22,5 @@ CTCategoryDifferenceCollection >> mappend: aMonoid [
 { #category : #monoid }
 CTCategoryDifferenceCollection >> mempty [
 
-	^ self class on: [ :aSequenceable | {  } , aSequenceable ]
+	^ self class on: [ :aSequenceable | aSequenceable ]
 ]

@@ -227,6 +227,29 @@ CTCategoryTest >> testApplicativeSequenceLists [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testMonadCountdownCollection [
+
+	self timeLimit: 1 minute.
+
+	self
+		deny: (50000 asWriterCategory: {  } asCollectionCategory)
+			>>= [ :n :category | 
+				self withWriterCountdown: n collectionCategory: category ]
+		equals: nil
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadCountdownDifferenceCollection [
+
+	self
+		deny:
+			(500000 asWriterCategory: {  } asDifferenceCollectionCategory)
+			>>= [ :n :category | 
+				self withWriterCountdown: n differenceCollectionCategory: category ]
+		equals: nil
+]
+
+{ #category : #tests }
 CTCategoryTest >> testMonadDoMaybe [
 
 	"
@@ -582,4 +605,44 @@ gcd' a b
 				   { (a asString , ' mod: ' , b asString , ' = ' , mod asString) }
 					   asDifferenceCollectionCategory)
 			  >>= [ :_ :d | d return: result ] ] ]
+]
+
+{ #category : #tests }
+CTCategoryTest >> withWriterCountdown: n collectionCategory: category [
+
+	"
+finalCountDown :: Int -> Writer [String] ()
+             finalCountDown 0 = do
+                 tell [""0""]
+             finalCountDown x = do
+                 finalCountDown (x-1)
+                 tell [show x]
+"
+
+	^ n = 0
+		  ifTrue: [ category tell: { 0 asString } asCollectionCategory ]
+		  ifFalse: [ 
+			  (self withWriterCountdown: n - 1 collectionCategory: category)
+			  >>= [ :result :c | c tell: { n asString } asCollectionCategory ] ]
+]
+
+{ #category : #tests }
+CTCategoryTest >> withWriterCountdown: n differenceCollectionCategory: category [
+
+	"finalCountDown :: Int -> Writer (DiffList String) ()
+            finalCountDown 0 = do
+                tell (toDiffList [""0""])
+            finalCountDown x = do
+                finalCountDown (x-1)
+                tell (toDiffList [show x])"
+
+	^ n = 0
+		  ifTrue: [ 
+		  category tell: { 0 asString } asDifferenceCollectionCategory ]
+		  ifFalse: [ 
+			  (self
+				   withWriterCountdown: n - 1
+				   differenceCollectionCategory: category)
+			  >>= [ :result :c | 
+			  c tell: { n asString } asDifferenceCollectionCategory ] ]
 ]
