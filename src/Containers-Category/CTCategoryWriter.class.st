@@ -17,14 +17,19 @@ CTCategoryWriter class >> on: aMonoid [
 		  yourself
 ]
 
+{ #category : #applicative }
+CTCategoryWriter >> <*> anApplicative [
+
+	^ (anApplicative argument value: self argument) asWriterCategory:
+		  (self log mappend: anApplicative log)
+]
+
 { #category : #comparing }
 CTCategoryWriter >> = anObject [
 
 	"Answer whether the receiver and anObject represent the same object."
 
-	self == anObject ifTrue: [ ^ true ].
-	self class = anObject class ifFalse: [ ^ false ].
-	^ log = anObject log and: [ argument = anObject argument1 ]
+	^ super = anObject and: [ log = anObject log ]
 ]
 
 { #category : #monad }
@@ -33,14 +38,14 @@ CTCategoryWriter >> >>= aBlock [
 	| aWriterMonad |
 	aWriterMonad := aBlock cull: self argument cull: self.
 
-	^ (self class on: (self log mappend: aWriterMonad log)) on:
-		  aWriterMonad argument
+	^ aWriterMonad argument asWriterCategory:
+		  (self log mappend: aWriterMonad log)
 ]
 
-{ #category : #accessing }
-CTCategoryWriter >> argument1 [
+{ #category : #functor }
+CTCategoryWriter >> fmap: aBlock [
 
-	^ argument
+	^ (aBlock cull: self argument cull: self) asWriterCategory: self log
 ]
 
 { #category : #comparing }
@@ -63,10 +68,10 @@ CTCategoryWriter >> log: anObject [
 	log := anObject
 ]
 
-{ #category : #monad }
-CTCategoryWriter >> return: anObject [
+{ #category : #applicative }
+CTCategoryWriter >> pure: anObject [
 
-	^ (self class on: log mempty) on: anObject
+	^ anObject asWriterCategory: self log mempty
 ]
 
 { #category : #monad }

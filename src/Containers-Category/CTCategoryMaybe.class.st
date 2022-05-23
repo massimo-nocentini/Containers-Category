@@ -41,9 +41,3 @@ CTCategoryMaybe >> pure: object [
 
 	^ object asJustMaybeCategory
 ]
-
-{ #category : #monad }
-CTCategoryMaybe >> return: anObject [
-
-	^ self pure: anObject
-]

@@ -34,5 +34,5 @@ CTCategoryTMonad >> guard: aBoolean [
 { #category : #monad }
 CTCategoryTMonad >> return: anObject [
 
-	self explicitRequirement
+	^ self pure: anObject
 ]

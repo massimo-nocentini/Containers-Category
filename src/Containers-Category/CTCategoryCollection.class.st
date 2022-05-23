@@ -74,9 +74,3 @@ CTCategoryCollection >> pure: object [
 
 	^ self class on: { object }
 ]
-
-{ #category : #monad }
-CTCategoryCollection >> return: anObject [
-
-	^ self pure: anObject
-]
