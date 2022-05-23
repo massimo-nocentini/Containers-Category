@@ -1,8 +1,8 @@
 Class {
 	#name : #CTCategoryWriter,
 	#superclass : #CTCategory,
-	#traits : 'CTCategoryTMonadWriter',
-	#classTraits : 'CTCategoryTMonadWriter classTrait',
+	#traits : 'CTCategoryTMonad + CTCategoryTMonadWriter',
+	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonadWriter classTrait',
 	#instVars : [
 		'log'
 	],
@@ -56,6 +56,14 @@ CTCategoryWriter >> hash [
 	^ log hash bitXor: argument hash
 ]
 
+{ #category : #monad }
+CTCategoryWriter >> listen [
+
+	^ { 
+		  self argument.
+		  self log } asWriterCategory: self log
+]
+
 { #category : #accessing }
 CTCategoryWriter >> log [
 
@@ -68,6 +76,16 @@ CTCategoryWriter >> log: anObject [
 	log := anObject
 ]
 
+{ #category : #monad }
+CTCategoryWriter >> pass [
+
+	| anArray |
+	anArray := self argument.
+
+	^ { anArray first } asWriterCategory:
+		  (anArray second value: self log)
+]
+
 { #category : #applicative }
 CTCategoryWriter >> pure: anObject [
 
@@ -75,7 +93,7 @@ CTCategoryWriter >> pure: anObject [
 ]
 
 { #category : #monad }
-CTCategoryWriter >> tell: aMonoid [
+CTCategoryWriter >> writer: anObject monoid: aMonoid [
 
-	^ nil asWriterCategory: aMonoid
+	^ anObject asWriterCategory: aMonoid
 ]
