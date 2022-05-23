@@ -229,7 +229,9 @@ CTCategoryTest >> testApplicativeSequenceLists [
 { #category : #tests }
 CTCategoryTest >> testMonadCountdownCollection [
 
-	self timeLimit: 1 minute.
+	self
+		skip;
+		timeLimit: 1 minute.
 
 	self
 		deny: (50000 asWriterCategory: {  } asCollectionCategory)
@@ -353,8 +355,8 @@ CTCategoryTest >> testMonadMaybe [
 		equals: (9 * 10) asJustMaybeCategory.
 
 	self
-		assert:
-		CTCategory nothing >>= [ :x :category | category return: x * 10 ]
+		assert: CTCategory maybe nothing
+			>>= [ :x :category | category return: x * 10 ]
 		equals: CTCategory maybe nothing
 ]
 
@@ -375,7 +377,7 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 
 	self
 		assert: (pole maybeLandLeft: 10) value
-		equals: CTCategory nothing.
+		equals: CTCategory maybe nothing.
 
 	"return (0, 0) >>= landRight 2 >>= landLeft 2 >>= landRight 2"
 	self
@@ -404,7 +406,7 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 		assert:
 			(CTCategory maybe new return: pole) >>= [ :p | p maybeLandLeft: 1 ]
 			>>= [ :p | p maybeBanana ] >>= [ :p | p maybeLandRight: 1 ]
-		equals: CTCategory nothing
+		equals: CTCategory maybe nothing
 ]
 
 { #category : #tests }

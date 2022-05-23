@@ -32,12 +32,6 @@ CTCategory class >> maybe [
 ]
 
 { #category : #factory }
-CTCategory class >> nothing [
-
-	^ CTCategoryMaybe nothing
-]
-
-{ #category : #factory }
 CTCategory class >> number [
 
 	^ CTCategoryNumber
