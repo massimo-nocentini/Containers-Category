@@ -19,6 +19,12 @@ CTCategory class >> collection [
 	^ CTCategoryCollection
 ]
 
+{ #category : #factory }
+CTCategory class >> differenceCollection [
+
+	^ CTCategoryDifferenceCollection
+]
+
 { #category : #'as yet unclassified' }
 CTCategory class >> maybe [
 

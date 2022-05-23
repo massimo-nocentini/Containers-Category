@@ -24,25 +24,25 @@ Trait {
 	#category : #'Containers-Category'
 }
 
-{ #category : #monad }
+{ #category : #'monad writer' }
 CTCategoryTMonadWriter >> listen [
 
 	self explicitRequirement
 ]
 
-{ #category : #monad }
+{ #category : #'monad writer' }
 CTCategoryTMonadWriter >> pass [
 
 	self explicitRequirement
 ]
 
-{ #category : #monad }
+{ #category : #'monad writer' }
 CTCategoryTMonadWriter >> tell: aMonoid [
 
 	^ self writer: nil monoid: aMonoid
 ]
 
-{ #category : #monad }
+{ #category : #'monad writer' }
 CTCategoryTMonadWriter >> writer: anObject monoid: aMonoid [
 
 	self explicitRequirement

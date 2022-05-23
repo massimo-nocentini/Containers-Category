@@ -426,6 +426,23 @@ CTCategoryTest >> testMonadWriterGCD [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testMonadWriterGCDdifferenceCollection [
+
+	self
+		assert: ((897542437 -> 854797 asWriterCategory:
+				  {  } asDifferenceCollectionCategory)
+			 >>= [ :anAssoc :category | 
+				 self
+					 withWriter: anAssoc key
+					 gcd: anAssoc value
+					 differenceCollectionCategory: category ]) log
+				asOrderedCollection
+		equals: #( 'Finished with: 1' '14 mod: 1 = 0' '5573 mod: 14 = 1'
+			   '5587 mod: 5573 = 14' '854797 mod: 5587 = 5573'
+			   '897542437 mod: 854797 = 5587' )
+]
+
+{ #category : #tests }
 CTCategoryTest >> testMonoidmappendCollection [
 
 	"[1,2,3] `mappend` [4,5,6]"
@@ -532,4 +549,37 @@ gcd' a b
 				   { (a asString , ' mod: ' , b asString , ' = ' , mod asString) }
 					   asCollectionCategory)
 			  >>= [ :_ :c | self withWriter: b gcd: mod category: c ] ]
+]
+
+{ #category : #tests }
+CTCategoryTest >> withWriter: a gcd: b differenceCollectionCategory: category [
+
+	"
+gcd' :: Int -> Int -> Writer (DiffList String) Int
+gcd' a b
+    | b == 0 = do
+       tell (toDiffList ['Finished with ' ++ show a])
+       return a
+    | otherwise = do
+       result <- gcd' b (a `mod` b)
+       tell (toDiffList [show a ++ ' mod ' ++ show b ++ ' = ' ++ show (a `mod` b)])
+       return result
+"
+
+	^ b = 0
+		  ifTrue: [ 
+			  (category tell:
+				   { ('Finished with: ' , a asString) }
+					   asDifferenceCollectionCategory) >>= [ :_ :c | c return: a ] ]
+		  ifFalse: [ 
+			  | mod |
+			  mod := a rem: b.
+			  (self
+				   withWriter: b
+				   gcd: mod
+				   differenceCollectionCategory: category) >>= [ :result :c | 
+			  (c tell:
+				   { (a asString , ' mod: ' , b asString , ' = ' , mod asString) }
+					   asDifferenceCollectionCategory)
+			  >>= [ :_ :d | d return: result ] ] ]
 ]

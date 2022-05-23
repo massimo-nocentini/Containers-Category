@@ -53,10 +53,10 @@ CTCategoryWriter >> hash [
 
 	"Answer an integer value that is related to the identity of the receiver."
 
-	^ log hash bitXor: argument hash
+	^ super hash bitXor: log hash
 ]
 
-{ #category : #monad }
+{ #category : #'monad writer' }
 CTCategoryWriter >> listen [
 
 	^ { 
@@ -76,7 +76,7 @@ CTCategoryWriter >> log: anObject [
 	log := anObject
 ]
 
-{ #category : #monad }
+{ #category : #'monad writer' }
 CTCategoryWriter >> pass [
 
 	| anArray |
@@ -92,7 +92,7 @@ CTCategoryWriter >> pure: anObject [
 	^ anObject asWriterCategory: self log mempty
 ]
 
-{ #category : #monad }
+{ #category : #'monad writer' }
 CTCategoryWriter >> writer: anObject monoid: aMonoid [
 
 	^ anObject asWriterCategory: aMonoid
