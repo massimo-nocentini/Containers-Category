@@ -55,6 +55,18 @@ CTCategoryTest >> stackStuffMonad [
 ]
 
 { #category : #tests }
+CTCategoryTest >> stackyStack: cat [
+
+	^ cat get >>= [ :stateNow :aCat | 
+	  | newState |
+	  newState := stateNow asLinkedList asArray = { 1. 2. 3 }
+		              ifTrue: [ { 8. 3. 1 } ]
+		              ifFalse: [ { 9. 2. 1 } ].
+
+	  aCat put: newState asLinkedList firstLink ]
+]
+
+{ #category : #tests }
 CTCategoryTest >> testApplicativeBlock [
 
 	"(+) <$> (+3) <*> (*100) $ 5"
@@ -510,6 +522,19 @@ CTCategoryTest >> testMonadStateStackStuff [
 	self
 		assert: anAssoc value asLinkedList asArray
 		equals: { 8. 3. 0. 2. 1. 0 }
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadStateStackyStack [
+
+	| anAssoc |
+	anAssoc := (self moreStuffMonad
+	            >>= [ :x :cat | self stackyStack: cat ]) argument
+	           ! { 100. 0. 2. 1. 0 } asLinkedList firstLink.
+
+	self assert: anAssoc key equals: nil.
+
+	self assert: anAssoc value asLinkedList asArray equals: { 9. 2. 1 }
 ]
 
 { #category : #tests }

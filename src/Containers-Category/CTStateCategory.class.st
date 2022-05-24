@@ -16,8 +16,8 @@ instance Monad (State s) where
 Class {
 	#name : #CTStateCategory,
 	#superclass : #CTCategory,
-	#traits : 'TCTMonadCategory',
-	#classTraits : 'TCTMonadCategory classTrait',
+	#traits : 'TCTMonadCategory + TCTMonadStateCategory',
+	#classTraits : 'TCTMonadCategory classTrait + TCTMonadStateCategory classTrait',
 	#instVars : [
 		'log'
 	],
@@ -68,6 +68,12 @@ CTStateCategory >> fmap: aBlock [
 	  b -> anAssoc value ] asState asCategory
 ]
 
+{ #category : #'actions api' }
+CTStateCategory >> get [
+
+	^ [ :s | s -> s ] asState asCategory
+]
+
 { #category : #applicative }
 CTStateCategory >> pure: object [
 
@@ -82,4 +88,10 @@ CTStateCategory >> pure: object [
 	"return x = State $ \s -> (x, s)"
 
 	^ [ :state | object -> state ] asState asCategory
+]
+
+{ #category : #'actions api' }
+CTStateCategory >> put: aState [
+
+	^ [ :s | nil -> aState ] asState asCategory
 ]
