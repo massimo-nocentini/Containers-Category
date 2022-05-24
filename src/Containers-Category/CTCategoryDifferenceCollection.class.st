@@ -1,26 +1,20 @@
 Class {
 	#name : #CTCategoryDifferenceCollection,
-	#superclass : #CTCategory,
-	#traits : 'CTCategoryTMonoid',
-	#classTraits : 'CTCategoryTMonoid classTrait',
+	#superclass : #Object,
+	#instVars : [
+		'collection'
+	],
 	#category : #'Containers-Category'
 }
 
-{ #category : #converting }
-CTCategoryDifferenceCollection >> asOrderedCollection [
+{ #category : #accessing }
+CTCategoryDifferenceCollection >> collection [
 
-	^ self argument ! {  }
+	^ collection
 ]
 
-{ #category : #monoid }
-CTCategoryDifferenceCollection >> mappend: aMonoid [
+{ #category : #accessing }
+CTCategoryDifferenceCollection >> collection: anObject [
 
-	^ self class on: [ :aSequenceable | 
-		  aMonoid argument ! aSequenceable -! self argument ]
-]
-
-{ #category : #monoid }
-CTCategoryDifferenceCollection >> mempty [
-
-	^ self class on: [ :aSequenceable | aSequenceable ]
+	collection := anObject
 ]

@@ -22,7 +22,7 @@ CTCategory class >> collection [
 { #category : #factory }
 CTCategory class >> differenceCollection [
 
-	^ CTCategoryDifferenceCollection
+	^ CTDifferenceCollectionCategory
 ]
 
 { #category : #'as yet unclassified' }
