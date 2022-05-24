@@ -13,12 +13,6 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'instance creation' }
-CTCategoryBlock class >> on: aBlock [
-
-	^ super on: aBlock currified
-]
-
 { #category : #applicative }
 CTCategoryBlock >> <*> anApplicative [
 
@@ -30,8 +24,8 @@ instance Applicative ((->) r) where
 	
 	"
 
-	^ self class on: [ :x | 
-		  anApplicative argument ! x ! (self argument ! x) ]
+	^ [ :x | anApplicative argument ! x ! (self argument ! x) ]
+		  asCategory
 ]
 
 { #category : #monad }
@@ -43,10 +37,12 @@ CTCategoryBlock >> >>= aBlock [
 
 	"h >>= f = \w -> f (h w) w"
 
-	^ self class on: [ :w | 
-		  | aBlockMonad |
-		  aBlockMonad := aBlock cull: (self argument value: w) cull: self.
-		  aBlockMonad argument value: w ]
+	^ [ :c | 
+	  | aBlockMonad a b |
+	  a := self argument value: c.
+	  aBlockMonad := aBlock cull: a cull: self.
+	  b := aBlockMonad argument value: c.
+	  b ] asCategory
 ]
 
 { #category : #functor }
@@ -57,10 +53,10 @@ CTCategoryBlock >> fmap: aBlock [
 		fmap f g = (\x -> f (g x))
 	"
 
-	^ self class on: [ :object | 
-		  | value |
-		  value := self argument value: object.
-		  aBlock cull: value cull: self ]
+	^ [ :object | 
+	  | value |
+	  value := self argument value: object.
+	  aBlock ! value ] asCategory
 ]
 
 { #category : #applicative }
@@ -74,5 +70,5 @@ instance Applicative ((->) r) where
 	
 	"
 
-	^ self class on: [ :useless | object ]
+	^ [ :useless | object ] asCategory
 ]

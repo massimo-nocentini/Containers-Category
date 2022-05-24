@@ -41,7 +41,7 @@ CTCategory class >> number [
 CTCategory class >> on: anObject [
 
 	^ self new
-		  on: anObject;
+		  argument: anObject;
 		  yourself
 ]
 
@@ -65,6 +65,12 @@ CTCategory >> = anObject [
 CTCategory >> argument [
 
 	^ argument
+]
+
+{ #category : #'instance creation' }
+CTCategory >> argument: anObject [
+
+	argument := anObject
 ]
 
 { #category : #comparing }
