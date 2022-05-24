@@ -19,6 +19,42 @@ CTCategoryTest >> addDrinkWithPriceWriter: x [
 ]
 
 { #category : #tests }
+CTCategoryTest >> moreStuffMonad [
+
+	^ self stackManipMonad >>= [ :a :cat | 
+	  a = 100
+		  ifTrue: [ self stackStuffMonad ]
+		  ifFalse: [ cat return: nil ] ]
+]
+
+{ #category : #tests }
+CTCategoryTest >> pop [
+
+	^ [ :link | link value -> link nextLink ] asState asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> push: anObject [
+
+	^ [ :link | nil -> (anObject ~~> link) ] asState asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> stackManipMonad [
+
+	^ (self push: 3) >> self pop >> self pop
+]
+
+{ #category : #tests }
+CTCategoryTest >> stackStuffMonad [
+
+	^ self pop >>= [ :a | 
+	  a = 5
+		  ifTrue: [ self push: 5 ]
+		  ifFalse: [ (self push: 3) >> (self push: 8) ] ]
+]
+
+{ #category : #tests }
 CTCategoryTest >> testApplicativeBlock [
 
 	"(+) <$> (+3) <*> (*100) $ 5"
@@ -420,6 +456,60 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 			(CTMaybeCategory new return: pole) >>= [ :p | p maybeLandLeft: 1 ]
 			>>= [ :p | p maybeBanana ] >>= [ :p | p maybeLandRight: 1 ]
 		equals: self asNothingMaybe asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadState [
+
+	"
+
+stackManip :: State Stack Int
+stackManip = do
+    push 3
+    a <- pop
+    pop
+
+	"
+
+	| anAssoc |
+	anAssoc := self stackManipMonad argument
+	           ! { 5. 8. 2. 1 } asLinkedList firstLink.
+
+	self
+		assert: anAssoc key equals: 5;
+		assert: anAssoc value asLinkedList asArray equals: { 8. 2. 1 }
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadStateMoreStackStuff [
+
+	"runState stackStuff [9,0,2,1,0]"
+
+	| anAssoc |
+	anAssoc := self moreStuffMonad argument
+	           ! { 100. 0. 2. 1. 0 } asLinkedList firstLink.
+
+	self assert: anAssoc key equals: nil.
+
+	self
+		assert: anAssoc value asLinkedList asArray
+		equals: { 8. 3. 2. 1. 0 }
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadStateStackStuff [
+
+	"runState stackStuff [9,0,2,1,0]"
+
+	| anAssoc |
+	anAssoc := self stackStuffMonad argument
+	           ! { 9. 0. 2. 1. 0 } asLinkedList firstLink.
+
+	self assert: anAssoc key equals: nil.
+
+	self
+		assert: anAssoc value asLinkedList asArray
+		equals: { 8. 3. 0. 2. 1. 0 }
 ]
 
 { #category : #tests }

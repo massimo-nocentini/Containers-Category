@@ -13,6 +13,14 @@ BlockClosure >> asCategory [
 ]
 
 { #category : #'*Containers-Category' }
+BlockClosure >> asState [
+
+	^ CTCategoryState new
+		  object: self;
+		  yourself
+]
+
+{ #category : #'*Containers-Category' }
 BlockClosure >> currified [
 
 	| size |
