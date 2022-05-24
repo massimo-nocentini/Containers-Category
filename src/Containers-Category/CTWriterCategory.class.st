@@ -90,6 +90,15 @@ CTWriterCategory >> log: anObject [
 	log := anObject
 ]
 
+{ #category : #'instance creation' }
+CTWriterCategory >> on: anObject [
+
+	^ self class new
+		  log: self log;
+		  argument: anObject;
+		  yourself
+]
+
 { #category : #'monad writer' }
 CTWriterCategory >> pass [
 

@@ -80,9 +80,3 @@ CTCategory >> hash [
 
 	^ argument hash
 ]
-
-{ #category : #'instance creation' }
-CTCategory >> on: anObject [
-
-	argument := anObject
-]
