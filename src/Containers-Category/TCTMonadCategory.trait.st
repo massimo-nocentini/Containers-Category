@@ -31,6 +31,12 @@ TCTMonadCategory >> guard: aBoolean [
 		  ifFalse: [ self fail: nil ]
 ]
 
+{ #category : #'as yet unclassified' }
+TCTMonadCategory >> liftM: aBlock [
+
+	^ self >>= [ :arg :cat | cat return: aBlock ! arg ]
+]
+
 { #category : #monad }
 TCTMonadCategory >> return: anObject [
 

@@ -381,6 +381,39 @@ CTCategoryTest >> testMonadGuardInBind [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testMonadLiftM [
+
+	"runWriter $ fmap not $ Writer (True, ""chickpeas"")"
+
+	self
+		assert:
+			((true asWriterCategory: { 'chickpeas' } asCategory) fmap: [ 
+				 :aBoolean | aBoolean not ])
+		equals: (false asWriterCategory: { 'chickpeas' } asCategory)
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadLiftMState [
+
+	"runState (fmap (+100) pop) [1,2,3,4]"
+
+	| anAssoc |
+	anAssoc := (self pop fmap: [ :x | x + 100 ]) argument
+	           ! { 1. 2. 3. 4 } asLinkedList firstLink.
+
+	self assert: anAssoc key equals: 101.
+
+	self assert: anAssoc value asLinkedList asArray equals: { 2. 3. 4 }.
+
+	anAssoc := (self pop liftM: [ :x | x + 100 ]) argument
+	           ! { 1. 2. 3. 4 } asLinkedList firstLink.
+
+	self assert: anAssoc key equals: 101.
+
+	self assert: anAssoc value asLinkedList asArray equals: { 2. 3. 4 }
+]
+
+{ #category : #tests }
 CTCategoryTest >> testMonadList [
 
 	"[3,4,5] >>= \x -> [x,-x]"
