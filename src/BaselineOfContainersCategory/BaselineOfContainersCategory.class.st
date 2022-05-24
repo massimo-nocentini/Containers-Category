@@ -8,7 +8,8 @@ Class {
 BaselineOfContainersCategory >> baseline: spec [
 
 	<baseline>
-	spec for: #common do: [
+	spec for: #common do: [ 
 		spec
-		package: 'Containers-Category' ]
+			package: 'Containers-Category';
+			package: 'Containers-Category-Tests' ]
 ]
