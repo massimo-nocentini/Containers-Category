@@ -4,6 +4,6 @@ Extension { #name : #SequenceableCollection }
 SequenceableCollection >> asDifferenceCollection [
 
 	^ CTCategoryDifferenceCollection new
-		  collection: self;
+		  object: self;
 		  yourself
 ]

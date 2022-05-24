@@ -11,11 +11,11 @@ Class {
 CTCategoryTest >> addDrinkWithPriceWriter: x [
 
 	^ x = 'beans'
-		  ifTrue: [ 'milk' asWriterCategory: 25 asSumNumberCategory ]
+		  ifTrue: [ 'milk' asWriterCategory: 25 asSumNumber asCategory ]
 		  ifFalse: [ 
 			  x = 'jerky'
-				  ifTrue: [ 'whiskey' asWriterCategory: 99 asSumNumberCategory ]
-				  ifFalse: [ 'beer' asWriterCategory: 30 asSumNumberCategory ] ]
+				  ifTrue: [ 'whiskey' asWriterCategory: 99 asSumNumber asCategory ]
+				  ifFalse: [ 'beer' asWriterCategory: 30 asSumNumber asCategory ] ]
 ]
 
 { #category : #tests }
@@ -452,10 +452,10 @@ CTCategoryTest >> testMonadWriter [
 	"(""dogmeat"", Sum 5) `applyLog` addDrink `applyLog` addDrink"
 
 	self
-		assert: ('dogmeat' asWriterCategory: 5 asSumNumberCategory)
+		assert: ('dogmeat' asWriterCategory: 5 asSumNumber asCategory)
 			>>= [ :x | self addDrinkWithPriceWriter: x ]
 			>>= [ :x | self addDrinkWithPriceWriter: x ]
-		equals: ('beer' asWriterCategory: 65 asSumNumberCategory)
+		equals: ('beer' asWriterCategory: 65 asSumNumber asCategory)
 ]
 
 { #category : #tests }
@@ -506,9 +506,9 @@ CTCategoryTest >> testMonoidmappendMaybeProduct [
 	"Just (Product 3) `mappend` Just (Product 4)"
 
 	self
-		assert: (3 asProductNumberCategory asJustMaybeCategory mappend:
-				 9 asProductNumberCategory asJustMaybeCategory)
-		equals: 27 asProductNumberCategory asJustMaybeCategory
+		assert: (3 asProductNumber asCategory asJustMaybeCategory mappend:
+				 9 asProductNumber asCategory asJustMaybeCategory)
+		equals: 27 asProductNumber asCategory asJustMaybeCategory
 ]
 
 { #category : #tests }
@@ -518,8 +518,8 @@ CTCategoryTest >> testMonoidmappendProduct [
 
 	self
 		assert:
-		(3 asProductNumberCategory mappend: 9 asProductNumberCategory)
-		equals: 27 asProductNumberCategory
+		(3 asProductNumber asCategory mappend: 9 asProductNumber asCategory)
+		equals: 27 asProductNumber asCategory
 ]
 
 { #category : #tests }
@@ -559,8 +559,8 @@ CTCategoryTest >> testMonoidmconcatProduct [
 
 	self
 		assert: (CTCategory number product new mconcat:
-				 ({ 3. 4. 2 } collect: [ :each | each asProductNumberCategory ]))
-		equals: (3 * 4 * 2) asProductNumberCategory
+				 ({ 3. 4. 2 } collect: [ :each | each asProductNumber asCategory ]))
+		equals: (3 * 4 * 2) asProductNumber asCategory
 ]
 
 { #category : #tests }

@@ -1,9 +1,19 @@
 Extension { #name : #Number }
 
 { #category : #'*Containers-Category' }
-Number >> asProductNumberCategory [
+Number >> asProductNumber [
 
-	^ CTCategory number product on: self
+	^ CTCategoryProductNumber new
+		  object: self;
+		  yourself
+]
+
+{ #category : #'*Containers-Category' }
+Number >> asSumNumber [
+
+	^ CTCategorySumNumber new
+		  object: self;
+		  yourself
 ]
 
 { #category : #'*Containers-Category' }

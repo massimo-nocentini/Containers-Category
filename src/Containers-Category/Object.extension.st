@@ -1,6 +1,14 @@
 Extension { #name : #Object }
 
 { #category : #'*Containers-Category' }
+Object >> asCategory [
+
+	^ CTCategoryAsCategory new
+		  object: self;
+		  yourself
+]
+
+{ #category : #'*Containers-Category' }
 Object >> asJustMaybeCategory [
 
 	^ CTCategory maybe just: self
@@ -15,5 +23,5 @@ Object >> asNothingMaybeCategory [
 { #category : #'*Containers-Category' }
 Object >> asWriterCategory: aMonoid [
 
-	^ (CTCategory writer on: aMonoid) on: self
+	^ (CTWriterCategory on: aMonoid) on: self
 ]
