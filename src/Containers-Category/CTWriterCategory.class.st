@@ -1,5 +1,5 @@
 Class {
-	#name : #CTCategoryWriter,
+	#name : #CTWriterCategory,
 	#superclass : #CTCategory,
 	#traits : 'CTCategoryTMonad + CTCategoryTMonadWriter',
 	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonadWriter classTrait',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-CTCategoryWriter class >> on: aMonoid [
+CTWriterCategory class >> on: aMonoid [
 
 	^ self new
 		  log: aMonoid;
@@ -18,7 +18,7 @@ CTCategoryWriter class >> on: aMonoid [
 ]
 
 { #category : #applicative }
-CTCategoryWriter >> <*> anApplicative [
+CTWriterCategory >> <*> anApplicative [
 
 	| aWriter |
 	aWriter := self fmap: anApplicative argument.
@@ -28,7 +28,7 @@ CTCategoryWriter >> <*> anApplicative [
 ]
 
 { #category : #comparing }
-CTCategoryWriter >> = anObject [
+CTWriterCategory >> = anObject [
 
 	"Answer whether the receiver and anObject represent the same object."
 
@@ -36,7 +36,7 @@ CTCategoryWriter >> = anObject [
 ]
 
 { #category : #monad }
-CTCategoryWriter >> >>= aBlock [
+CTWriterCategory >> >>= aBlock [
 
 	| aWriterMonad newArgument |
 	"
@@ -57,13 +57,13 @@ CTCategoryWriter >> >>= aBlock [
 ]
 
 { #category : #functor }
-CTCategoryWriter >> fmap: aBlock [
+CTWriterCategory >> fmap: aBlock [
 
 	^ (aBlock value: self argument) asWriterCategory: self log
 ]
 
 { #category : #comparing }
-CTCategoryWriter >> hash [
+CTWriterCategory >> hash [
 
 	"Answer an integer value that is related to the identity of the receiver."
 
@@ -71,7 +71,7 @@ CTCategoryWriter >> hash [
 ]
 
 { #category : #'monad writer' }
-CTCategoryWriter >> listen [
+CTWriterCategory >> listen [
 
 	^ { 
 		  self argument.
@@ -79,19 +79,19 @@ CTCategoryWriter >> listen [
 ]
 
 { #category : #accessing }
-CTCategoryWriter >> log [
+CTWriterCategory >> log [
 
 	^ log
 ]
 
 { #category : #accessing }
-CTCategoryWriter >> log: anObject [
+CTWriterCategory >> log: anObject [
 
 	log := anObject
 ]
 
 { #category : #'monad writer' }
-CTCategoryWriter >> pass [
+CTWriterCategory >> pass [
 
 	| anArray |
 	anArray := self argument.
@@ -101,13 +101,13 @@ CTCategoryWriter >> pass [
 ]
 
 { #category : #applicative }
-CTCategoryWriter >> pure: anObject [
+CTWriterCategory >> pure: anObject [
 
 	^ anObject asWriterCategory: self log mempty
 ]
 
 { #category : #'monad writer' }
-CTCategoryWriter >> writer: anObject monoid: aMonoid [
+CTWriterCategory >> writer: anObject monoid: aMonoid [
 
 	^ anObject asWriterCategory: aMonoid
 ]

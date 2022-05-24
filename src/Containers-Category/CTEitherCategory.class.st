@@ -6,7 +6,7 @@ data Either a b = Left a | Right b
 ```
 "
 Class {
-	#name : #CTCategoryEither,
+	#name : #CTEitherCategory,
 	#superclass : #CTCategory,
 	#traits : 'CTCategoryTFunctor',
 	#classTraits : 'CTCategoryTFunctor classTrait',

@@ -1,34 +1,34 @@
 Class {
-	#name : #CTCategoryMaybeJust,
-	#superclass : #CTCategoryMaybe,
+	#name : #CTJustMaybeCategory,
+	#superclass : #CTMaybeCategory,
 	#category : #'Containers-Category'
 }
 
 { #category : #'as yet unclassified' }
-CTCategoryMaybeJust >> <*> functorJust [
+CTJustMaybeCategory >> <*> functorJust [
 
 	^ self fmap: functorJust argument
 ]
 
 { #category : #monad }
-CTCategoryMaybeJust >> >>= aBlock [
+CTJustMaybeCategory >> >>= aBlock [
 
 	^ aBlock cull: self argument cull: self
 ]
 
 { #category : #'accessing - structure variables' }
-CTCategoryMaybeJust >> fmap: aBlock [
+CTJustMaybeCategory >> fmap: aBlock [
 
 	^ self class on: (aBlock cull: self argument cull: self)
 ]
 
 { #category : #'as yet unclassified' }
-CTCategoryMaybeJust >> ifNothing: nBlock ifJust: jBlock [
+CTJustMaybeCategory >> ifNothing: nBlock ifJust: jBlock [
 	^ jBlock value: self
 ]
 
 { #category : #'as yet unclassified' }
-CTCategoryMaybeJust >> mappend: aMonoid [
+CTJustMaybeCategory >> mappend: aMonoid [
 
 	^ aMonoid
 		  ifNothing: [ self ]
@@ -37,7 +37,7 @@ CTCategoryMaybeJust >> mappend: aMonoid [
 ]
 
 { #category : #printing }
-CTCategoryMaybeJust >> printOn: aStream [
+CTJustMaybeCategory >> printOn: aStream [
 
 	super printOn: aStream.
 	aStream nextPut: $(.

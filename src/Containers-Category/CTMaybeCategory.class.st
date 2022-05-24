@@ -1,5 +1,5 @@
 Class {
-	#name : #CTCategoryMaybe,
+	#name : #CTMaybeCategory,
 	#superclass : #CTCategory,
 	#traits : 'CTCategoryTMonad + CTCategoryTMonoid',
 	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonoid classTrait',
@@ -7,37 +7,37 @@ Class {
 }
 
 { #category : #factory }
-CTCategoryMaybe class >> just: anObject [
+CTMaybeCategory class >> just: anObject [
 
-	^ CTCategoryMaybeJust on: anObject
+	^ CTJustMaybeCategory on: anObject
 ]
 
 { #category : #factory }
-CTCategoryMaybe class >> nothing [
+CTMaybeCategory class >> nothing [
 
-	^ CTCategoryMaybeNothing on: nil
+	^ CTNothingMaybeCategory on: nil
 ]
 
 { #category : #monad }
-CTCategoryMaybe >> fail: aString [
+CTMaybeCategory >> fail: aString [
 
 	^ self class nothing
 ]
 
 { #category : #controlling }
-CTCategoryMaybe >> ifNothing: nBlock ifJust: jBlock [
+CTMaybeCategory >> ifNothing: nBlock ifJust: jBlock [
 
 	self subclassResponsibility
 ]
 
 { #category : #monoid }
-CTCategoryMaybe >> mempty [
+CTMaybeCategory >> mempty [
 
 	^ self class nothing
 ]
 
 { #category : #applicative }
-CTCategoryMaybe >> pure: object [
+CTMaybeCategory >> pure: object [
 
 	^ object asJustMaybeCategory
 ]

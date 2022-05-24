@@ -1,17 +1,17 @@
 Class {
-	#name : #CTCategoryNumber,
+	#name : #CTNumberCategory,
 	#superclass : #CTCategory,
 	#category : #'Containers-Category'
 }
 
 { #category : #'as yet unclassified' }
-CTCategoryNumber class >> product [
+CTNumberCategory class >> product [
 
-	^ CTCategoryNumberProduct
+	^ CTProductNumberCategory
 ]
 
 { #category : #'as yet unclassified' }
-CTCategoryNumber class >> sum [
+CTNumberCategory class >> sum [
 
-	^ CTCategoryNumberSum
+	^ CTSumNumberCategory
 ]

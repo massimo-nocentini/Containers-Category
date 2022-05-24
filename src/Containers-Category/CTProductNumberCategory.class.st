@@ -1,19 +1,19 @@
 Class {
-	#name : #CTCategoryNumberProduct,
-	#superclass : #CTCategoryNumber,
+	#name : #CTProductNumberCategory,
+	#superclass : #CTNumberCategory,
 	#traits : 'CTCategoryTMonoid',
 	#classTraits : 'CTCategoryTMonoid classTrait',
 	#category : #'Containers-Category'
 }
 
 { #category : #monoid }
-CTCategoryNumberProduct >> mappend: aMonoid [
+CTProductNumberCategory >> mappend: aMonoid [
 
 	^ self class on: self argument * aMonoid argument
 ]
 
 { #category : #monoid }
-CTCategoryNumberProduct >> mempty [
+CTProductNumberCategory >> mempty [
 
 	^ self class on: 1
 ]

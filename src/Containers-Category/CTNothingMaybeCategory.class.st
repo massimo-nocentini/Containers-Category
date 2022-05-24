@@ -1,35 +1,35 @@
 Class {
-	#name : #CTCategoryMaybeNothing,
-	#superclass : #CTCategoryMaybe,
+	#name : #CTNothingMaybeCategory,
+	#superclass : #CTMaybeCategory,
 	#category : #'Containers-Category'
 }
 
 { #category : #'accessing - structure variables' }
-CTCategoryMaybeNothing >> <*> functorJust [
+CTNothingMaybeCategory >> <*> functorJust [
 
 	^ self
 ]
 
 { #category : #monad }
-CTCategoryMaybeNothing >> >>= aBlock [
+CTNothingMaybeCategory >> >>= aBlock [
 
 	^ self
 ]
 
 { #category : #'accessing - structure variables' }
-CTCategoryMaybeNothing >> fmap: aBlock [
+CTNothingMaybeCategory >> fmap: aBlock [
 
 	^ self
 ]
 
 { #category : #'as yet unclassified' }
-CTCategoryMaybeNothing >> ifNothing: nBlock ifJust: jBlock [
+CTNothingMaybeCategory >> ifNothing: nBlock ifJust: jBlock [
 
 	^ nBlock value
 ]
 
 { #category : #'as yet unclassified' }
-CTCategoryMaybeNothing >> mappend: aMonoid [
+CTNothingMaybeCategory >> mappend: aMonoid [
 
 	^ aMonoid
 ]

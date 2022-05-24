@@ -10,13 +10,13 @@ Class {
 { #category : #factory }
 CTCategory class >> block [
 
-	^ CTCategoryBlock
+	^ CTBlockClosureCategory
 ]
 
 { #category : #factory }
 CTCategory class >> collection [
 
-	^ CTCategoryCollection
+	^ CTCollectionCategory
 ]
 
 { #category : #factory }
@@ -28,13 +28,13 @@ CTCategory class >> differenceCollection [
 { #category : #'as yet unclassified' }
 CTCategory class >> maybe [
 
-	^ CTCategoryMaybe
+	^ CTMaybeCategory
 ]
 
 { #category : #factory }
 CTCategory class >> number [
 
-	^ CTCategoryNumber
+	^ CTNumberCategory
 ]
 
 { #category : #'instance creation' }
@@ -48,7 +48,7 @@ CTCategory class >> on: anObject [
 { #category : #'as yet unclassified' }
 CTCategory class >> writer [
 
-	^ CTCategoryWriter
+	^ CTWriterCategory
 ]
 
 { #category : #comparing }

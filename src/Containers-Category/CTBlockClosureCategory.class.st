@@ -6,7 +6,7 @@ instance Monad ((->) r) where
 ```
 "
 Class {
-	#name : #CTCategoryBlock,
+	#name : #CTBlockClosureCategory,
 	#superclass : #CTCategory,
 	#traits : 'CTCategoryTMonad',
 	#classTraits : 'CTCategoryTMonad classTrait',
@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : #applicative }
-CTCategoryBlock >> <*> anApplicative [
+CTBlockClosureCategory >> <*> anApplicative [
 
 	"
 
@@ -29,7 +29,7 @@ instance Applicative ((->) r) where
 ]
 
 { #category : #monad }
-CTCategoryBlock >> >>= aBlock [
+CTBlockClosureCategory >> >>= aBlock [
 
 	"(a -> m b) -> m a -> m b"
 
@@ -46,7 +46,7 @@ CTCategoryBlock >> >>= aBlock [
 ]
 
 { #category : #functor }
-CTCategoryBlock >> fmap: aBlock [
+CTBlockClosureCategory >> fmap: aBlock [
 
 	"
 	instance Functor ((->) r) where
@@ -60,7 +60,7 @@ CTCategoryBlock >> fmap: aBlock [
 ]
 
 { #category : #applicative }
-CTCategoryBlock >> pure: object [
+CTBlockClosureCategory >> pure: object [
 
 	"
 

@@ -1,11 +1,11 @@
 Class {
-	#name : #CTCategoryEitherLeft,
-	#superclass : #CTCategoryEither,
+	#name : #CTLeftEitherCategory,
+	#superclass : #CTEitherCategory,
 	#category : #'Containers-Category'
 }
 
 { #category : #'accessing - structure variables' }
-CTCategoryEitherLeft >> fmap: aBlock [
+CTLeftEitherCategory >> fmap: aBlock [
 
 	^ self
 ]

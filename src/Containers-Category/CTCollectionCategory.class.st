@@ -1,5 +1,5 @@
 Class {
-	#name : #CTCategoryCollection,
+	#name : #CTCollectionCategory,
 	#superclass : #CTCategory,
 	#traits : 'CTCategoryTMonad + CTCategoryTMonoid',
 	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonoid classTrait',
@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : #applicative }
-CTCategoryCollection >> <*> anApplicativeOfBlocks [
+CTCollectionCategory >> <*> anApplicativeOfBlocks [
 
 	| array i otherCollection collection |
 	collection := self argument.
@@ -29,7 +29,7 @@ CTCategoryCollection >> <*> anApplicativeOfBlocks [
 ]
 
 { #category : #monad }
-CTCategoryCollection >> >>= aBlock [
+CTCollectionCategory >> >>= aBlock [
 
 	^ self class on:
 		  ((self fmap: aBlock) argument flatCollect: [ :each | 
@@ -37,20 +37,20 @@ CTCategoryCollection >> >>= aBlock [
 ]
 
 { #category : #monad }
-CTCategoryCollection >> fail: aString [
+CTCollectionCategory >> fail: aString [
 
 	^ self mempty
 ]
 
 { #category : #functor }
-CTCategoryCollection >> fmap: aBlock [
+CTCollectionCategory >> fmap: aBlock [
 
 	^ self class on:
 		  (self argument collect: [ :each | aBlock cull: each cull: self ])
 ]
 
 { #category : #monoid }
-CTCategoryCollection >> mappend: aMonoid [
+CTCollectionCategory >> mappend: aMonoid [
 
 	"
 
@@ -64,13 +64,13 @@ CTCategoryCollection >> mappend: aMonoid [
 ]
 
 { #category : #monoid }
-CTCategoryCollection >> mempty [
+CTCollectionCategory >> mempty [
 
 	^ self class on: {  }
 ]
 
 { #category : #applicative }
-CTCategoryCollection >> pure: object [
+CTCollectionCategory >> pure: object [
 
 	^ self class on: { object }
 ]
