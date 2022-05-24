@@ -69,7 +69,7 @@ CTCategoryPole >> left: anObject [
 { #category : #'as yet unclassified' }
 CTCategoryPole >> maybeBanana [
 
-	^ CTCategory maybe nothing
+	^ self asNothingMaybe asCategory
 ]
 
 { #category : #initialization }

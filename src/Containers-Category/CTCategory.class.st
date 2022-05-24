@@ -7,48 +7,12 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #factory }
-CTCategory class >> block [
-
-	^ CTBlockClosureCategory
-]
-
-{ #category : #factory }
-CTCategory class >> collection [
-
-	^ CTCollectionCategory
-]
-
-{ #category : #factory }
-CTCategory class >> differenceCollection [
-
-	^ CTDifferenceCollectionCategory
-]
-
-{ #category : #'as yet unclassified' }
-CTCategory class >> maybe [
-
-	^ CTMaybeCategory
-]
-
-{ #category : #factory }
-CTCategory class >> number [
-
-	^ CTNumberCategory
-]
-
 { #category : #'instance creation' }
 CTCategory class >> on: anObject [
 
 	^ self new
 		  argument: anObject;
 		  yourself
-]
-
-{ #category : #'as yet unclassified' }
-CTCategory class >> writer [
-
-	^ CTWriterCategory
 ]
 
 { #category : #comparing }
