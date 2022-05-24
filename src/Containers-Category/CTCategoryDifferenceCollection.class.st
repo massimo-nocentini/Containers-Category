@@ -7,6 +7,13 @@ Class {
 	#category : #'Containers-Category'
 }
 
+{ #category : #converting }
+CTCategoryDifferenceCollection >> asCategory [
+
+	^ CTDifferenceCollectionCategory on: [ :aSequenceable | 
+		  self collection , aSequenceable ]
+]
+
 { #category : #accessing }
 CTCategoryDifferenceCollection >> collection [
 

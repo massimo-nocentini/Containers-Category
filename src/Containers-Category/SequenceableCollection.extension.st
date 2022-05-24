@@ -1,8 +1,9 @@
 Extension { #name : #SequenceableCollection }
 
 { #category : #'*Containers-Category' }
-SequenceableCollection >> asDifferenceCollectionCategory [
+SequenceableCollection >> asDifferenceCollection [
 
-	^ CTCategory differenceCollection on: [ :aSequenceable | 
-		  self , aSequenceable ]
+	^ CTCategoryDifferenceCollection new
+		  collection: self;
+		  yourself
 ]

@@ -267,7 +267,7 @@ CTCategoryTest >> testMonadCountdownDifferenceCollection [
 
 	self
 		deny:
-			(500000 asWriterCategory: {  } asDifferenceCollectionCategory)
+			(500000 asWriterCategory: {  } asDifferenceCollection asCategory)
 			>>= [ :n :category | 
 				self withWriterCountdown: n differenceCollectionCategory: category ]
 		equals: nil
@@ -477,7 +477,7 @@ CTCategoryTest >> testMonadWriterGCDdifferenceCollection [
 
 	self
 		assert: ((897542437 -> 854797 asWriterCategory:
-				  {  } asDifferenceCollectionCategory)
+				  {  } asDifferenceCollection asCategory)
 			 >>= [ :anAssoc :category | 
 				 self
 					 withWriter: anAssoc key
@@ -616,8 +616,8 @@ gcd' a b
 	^ b = 0
 		  ifTrue: [ 
 			  (category tell:
-				   { ('Finished with: ' , a asString) }
-					   asDifferenceCollectionCategory) >>= [ :_ :c | c return: a ] ]
+				   { ('Finished with: ' , a asString) } asDifferenceCollection
+					   asCategory) >>= [ :_ :c | c return: a ] ]
 		  ifFalse: [ 
 			  | mod |
 			  mod := a rem: b.
@@ -627,7 +627,7 @@ gcd' a b
 				   differenceCollectionCategory: category) >>= [ :result :c | 
 			  (c tell:
 				   { (a asString , ' mod: ' , b asString , ' = ' , mod asString) }
-					   asDifferenceCollectionCategory)
+					   asDifferenceCollection asCategory)
 			  >>= [ :_ :d | d return: result ] ] ]
 ]
 
@@ -662,11 +662,10 @@ CTCategoryTest >> withWriterCountdown: n differenceCollectionCategory: category 
 
 	^ n = 0
 		  ifTrue: [ 
-		  category tell: { 0 asString } asDifferenceCollectionCategory ]
+		  category tell: { 0 asString } asDifferenceCollection asCategory ]
 		  ifFalse: [ 
 			  (self
 				   withWriterCountdown: n - 1
-				   differenceCollectionCategory: category)
-			  >>= [ :result :c | 
-			  c tell: { n asString } asDifferenceCollectionCategory ] ]
+				   differenceCollectionCategory: category) >>= [ :result :c | 
+			  c tell: { n asString } asDifferenceCollection asCategory ] ]
 ]
