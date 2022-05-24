@@ -7,6 +7,12 @@ BlockClosure >> >=> aBlock [
 ]
 
 { #category : #'*Containers-Category' }
+BlockClosure >> asCategory [
+
+	^ CTCategory block on: self
+]
+
+{ #category : #'*Containers-Category' }
 BlockClosure >> currified [
 
 	| size |

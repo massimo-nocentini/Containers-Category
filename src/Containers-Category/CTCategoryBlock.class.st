@@ -1,8 +1,15 @@
+"
+```haskell
+instance Monad ((->) r) where
+    return x = \_ -> x
+    h >>= f = \w -> f (h w) w
+```
+"
 Class {
 	#name : #CTCategoryBlock,
 	#superclass : #CTCategory,
-	#traits : 'CTCategoryTApplicative',
-	#classTraits : 'CTCategoryTApplicative classTrait',
+	#traits : 'CTCategoryTMonad',
+	#classTraits : 'CTCategoryTMonad classTrait',
 	#category : #'Containers-Category'
 }
 
@@ -25,6 +32,21 @@ instance Applicative ((->) r) where
 
 	^ self class on: [ :x | 
 		  anApplicative argument ! x ! (self argument ! x) ]
+]
+
+{ #category : #monad }
+CTCategoryBlock >> >>= aBlock [
+
+	"(a -> m b) -> m a -> m b"
+
+	"(a -> (c -> b)) -> (c -> a) -> (c -> b)"
+
+	"h >>= f = \w -> f (h w) w"
+
+	^ self class on: [ :w | 
+		  | aBlockMonad |
+		  aBlockMonad := aBlock cull: (self argument value: w) cull: self.
+		  aBlockMonad argument value: w ]
 ]
 
 { #category : #functor }

@@ -227,6 +227,28 @@ CTCategoryTest >> testApplicativeSequenceLists [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testMonadBlock [
+
+	"
+
+addStuff :: Int -> Int
+addStuff = do
+    a <- (*2)
+    b <- (+10)
+    return (a+b)	
+
+	"
+
+	| aBlockMonad |
+	aBlockMonad := [ :x | x * 2 ] asCategory
+	               >>= [ :a | 
+	               [ :x | x + 10 ] asCategory
+	               >>= [ :b :cat | cat return: a + b ] ].
+
+	self assert: aBlockMonad argument ! 3 equals: 19
+]
+
+{ #category : #tests }
 CTCategoryTest >> testMonadCountdownCollection [
 
 	self
