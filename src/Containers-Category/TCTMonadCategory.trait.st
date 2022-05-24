@@ -1,30 +1,30 @@
 Trait {
-	#name : #CTCategoryTMonad,
-	#traits : 'CTCategoryTApplicative',
-	#classTraits : 'CTCategoryTApplicative classTrait',
+	#name : #TCTMonadCategory,
+	#traits : 'TCTApplicativeCategory',
+	#classTraits : 'TCTApplicativeCategory classTrait',
 	#category : #'Containers-Category'
 }
 
 { #category : #monad }
-CTCategoryTMonad >> >> aMonad [
+TCTMonadCategory >> >> aMonad [
 
 	^ self >>= [ :useless | aMonad ]
 ]
 
 { #category : #monad }
-CTCategoryTMonad >> >>= aBlock [
+TCTMonadCategory >> >>= aBlock [
 
 	self explicitRequirement
 ]
 
 { #category : #monad }
-CTCategoryTMonad >> fail: aString [
+TCTMonadCategory >> fail: aString [
 
 	self explicitRequirement
 ]
 
 { #category : #monad }
-CTCategoryTMonad >> guard: aBoolean [
+TCTMonadCategory >> guard: aBoolean [
 
 	^ aBoolean
 		  ifTrue: [ self return: nil ]
@@ -32,7 +32,7 @@ CTCategoryTMonad >> guard: aBoolean [
 ]
 
 { #category : #monad }
-CTCategoryTMonad >> return: anObject [
+TCTMonadCategory >> return: anObject [
 
 	^ self pure: anObject
 ]

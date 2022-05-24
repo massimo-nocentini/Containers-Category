@@ -1,8 +1,8 @@
 Class {
 	#name : #CTWriterCategory,
 	#superclass : #CTCategory,
-	#traits : 'CTCategoryTMonad + CTCategoryTMonadWriter',
-	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonadWriter classTrait',
+	#traits : 'TCTMonadCategory + TCTMonadWriterCategory',
+	#classTraits : 'TCTMonadCategory classTrait + TCTMonadWriterCategory classTrait',
 	#instVars : [
 		'log'
 	],

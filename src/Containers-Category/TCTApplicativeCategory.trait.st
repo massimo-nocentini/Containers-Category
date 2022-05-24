@@ -1,24 +1,24 @@
 Trait {
-	#name : #CTCategoryTApplicative,
-	#traits : 'CTCategoryTFunctor',
-	#classTraits : 'CTCategoryTFunctor classTrait',
+	#name : #TCTApplicativeCategory,
+	#traits : 'TCTFunctorCategory',
+	#classTraits : 'TCTFunctorCategory classTrait',
 	#category : #'Containers-Category'
 }
 
 { #category : #applicative }
-CTCategoryTApplicative >> <!> aBlock [
+TCTApplicativeCategory >> <!> aBlock [
 
 	^ self fmap: aBlock currified
 ]
 
 { #category : #applicative }
-CTCategoryTApplicative >> <*> anApplicative [
+TCTApplicativeCategory >> <*> anApplicative [
 
 	self explicitRequirement
 ]
 
 { #category : #applicative }
-CTCategoryTApplicative >> applicative: anApplicative lift: aTwoArgsBlock [
+TCTApplicativeCategory >> applicative: anApplicative lift: aTwoArgsBlock [
 
 	"
 
@@ -31,13 +31,13 @@ liftA2 f a b = f <$> a <*> b
 ]
 
 { #category : #applicative }
-CTCategoryTApplicative >> pure: object [
+TCTApplicativeCategory >> pure: object [
 
 	self explicitRequirement
 ]
 
 { #category : #applicative }
-CTCategoryTApplicative >> sequenceA: aLink [
+TCTApplicativeCategory >> sequenceA: aLink [
 
 	"
 sequenceA :: (Applicative f) => [f a] -> f [a]
@@ -52,7 +52,7 @@ sequenceA (x:xs) = (:) <$> x <*> sequenceA xs
 ]
 
 { #category : #applicative }
-CTCategoryTApplicative >> sequenceAsequenceable: aLink [
+TCTApplicativeCategory >> sequenceAsequenceable: aLink [
 
 	"
 sequenceA :: (Applicative f) => [f a] -> f [a]

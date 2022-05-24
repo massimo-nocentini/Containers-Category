@@ -1,16 +1,16 @@
 Trait {
-	#name : #CTCategoryTMonoid,
+	#name : #TCTMonoidCategory,
 	#category : #'Containers-Category'
 }
 
 { #category : #monoid }
-CTCategoryTMonoid >> mappend: aMonoid [
+TCTMonoidCategory >> mappend: aMonoid [
 
 	self explicitRequirement
 ]
 
 { #category : #monoid }
-CTCategoryTMonoid >> mconcat: aCollectionOfMonoids [
+TCTMonoidCategory >> mconcat: aCollectionOfMonoids [
 
 	^ aCollectionOfMonoids
 		  foldr: [ :each :acc | each mappend: acc ]
@@ -18,7 +18,7 @@ CTCategoryTMonoid >> mconcat: aCollectionOfMonoids [
 ]
 
 { #category : #monoid }
-CTCategoryTMonoid >> mempty [
+TCTMonoidCategory >> mempty [
 
 	self explicitRequirement
 ]

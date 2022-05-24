@@ -8,8 +8,8 @@ instance Monad ((->) r) where
 Class {
 	#name : #CTBlockClosureCategory,
 	#superclass : #CTCategory,
-	#traits : 'CTCategoryTMonad',
-	#classTraits : 'CTCategoryTMonad classTrait',
+	#traits : 'TCTMonadCategory',
+	#classTraits : 'TCTMonadCategory classTrait',
 	#category : #'Containers-Category'
 }
 

@@ -1,8 +1,8 @@
 Class {
 	#name : #CTDifferenceCollectionCategory,
 	#superclass : #CTCategory,
-	#traits : 'CTCategoryTMonoid',
-	#classTraits : 'CTCategoryTMonoid classTrait',
+	#traits : 'TCTMonoidCategory',
+	#classTraits : 'TCTMonoidCategory classTrait',
 	#category : #'Containers-Category'
 }
 

@@ -20,30 +20,30 @@ class (Monoid w, Monad m) => MonadWriter w m | m -> w where
     pass   :: m (a, w -> w) -> m a
 "
 Trait {
-	#name : #CTCategoryTMonadWriter,
+	#name : #TCTMonadWriterCategory,
 	#category : #'Containers-Category'
 }
 
 { #category : #'monad writer' }
-CTCategoryTMonadWriter >> listen [
+TCTMonadWriterCategory >> listen [
 
 	self explicitRequirement
 ]
 
 { #category : #'monad writer' }
-CTCategoryTMonadWriter >> pass [
+TCTMonadWriterCategory >> pass [
 
 	self explicitRequirement
 ]
 
 { #category : #'monad writer' }
-CTCategoryTMonadWriter >> tell: aMonoid [
+TCTMonadWriterCategory >> tell: aMonoid [
 
 	^ self writer: nil monoid: aMonoid
 ]
 
 { #category : #'monad writer' }
-CTCategoryTMonadWriter >> writer: anObject monoid: aMonoid [
+TCTMonadWriterCategory >> writer: anObject monoid: aMonoid [
 
 	self explicitRequirement
 ]

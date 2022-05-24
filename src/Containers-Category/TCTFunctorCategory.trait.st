@@ -1,10 +1,10 @@
 Trait {
-	#name : #CTCategoryTFunctor,
+	#name : #TCTFunctorCategory,
 	#category : #'Containers-Category'
 }
 
 { #category : #functor }
-CTCategoryTFunctor >> fmap: aBlock [
+TCTFunctorCategory >> fmap: aBlock [
 
 	self explicitRequirement
 ]

@@ -1,8 +1,8 @@
 Class {
 	#name : #CTMaybeCategory,
 	#superclass : #CTCategory,
-	#traits : 'CTCategoryTMonad + CTCategoryTMonoid',
-	#classTraits : 'CTCategoryTMonad classTrait + CTCategoryTMonoid classTrait',
+	#traits : 'TCTMonadCategory + TCTMonoidCategory',
+	#classTraits : 'TCTMonadCategory classTrait + TCTMonoidCategory classTrait',
 	#category : #'Containers-Category'
 }
 

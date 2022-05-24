@@ -8,7 +8,7 @@ data Either a b = Left a | Right b
 Class {
 	#name : #CTEitherCategory,
 	#superclass : #CTCategory,
-	#traits : 'CTCategoryTFunctor',
-	#classTraits : 'CTCategoryTFunctor classTrait',
+	#traits : 'TCTFunctorCategory',
+	#classTraits : 'TCTFunctorCategory classTrait',
 	#category : #'Containers-Category'
 }
