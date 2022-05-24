@@ -9,7 +9,7 @@ BlockClosure >> >=> aBlock [
 { #category : #'*Containers-Category' }
 BlockClosure >> asCategory [
 
-	^ CTCategory block on: self
+	^ CTCategoryBlock on: self
 ]
 
 { #category : #'*Containers-Category' }

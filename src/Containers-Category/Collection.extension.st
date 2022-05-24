@@ -1,7 +1,7 @@
 Extension { #name : #Collection }
 
 { #category : #'*Containers-Category' }
-Collection >> asCollectionCategory [
+Collection >> asCategory [
 
-	^ CTCategory collection on: self
+	^ CTCategoryCollection on: self
 ]

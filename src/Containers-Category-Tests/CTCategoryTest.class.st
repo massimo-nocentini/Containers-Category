@@ -87,11 +87,11 @@ CTCategoryTest >> testApplicativeCollectionOneArgBlocks [
 	"[(*0),(+100),(^2)] <*> [1,2,3]"
 
 	self
-		assert: { 1. 2. 3 } asCollectionCategory <*> { 
+		assert: { 1. 2. 3 } asCategory <*> { 
 				[ :i | i * 0 ].
 				[ :i | i + 100 ].
-				[ :i | i raisedTo: 2 ] } asCollectionCategory
-		equals: { 0. 0. 0. 101. 102. 103. 1. 4. 9 } asCollectionCategory
+				[ :i | i raisedTo: 2 ] } asCategory
+		equals: { 0. 0. 0. 101. 102. 103. 1. 4. 9 } asCategory
 ]
 
 { #category : #tests }
@@ -100,9 +100,9 @@ CTCategoryTest >> testApplicativeCollectionTwoArgsBlock [
 	"(*) <$> [2,5,10] <*> [8,10,11]"
 
 	self
-		assert: { 8. 10. 11 } asCollectionCategory
-			<*> ({ 2. 5. 10 } asCollectionCategory <!> [ :i :j | i * j ])
-		equals: #( 16 20 22 40 50 55 80 100 110 ) asCollectionCategory
+		assert: { 8. 10. 11 } asCategory
+			<*> ({ 2. 5. 10 } asCategory <!> [ :i :j | i * j ])
+		equals: #( 16 20 22 40 50 55 80 100 110 ) asCategory
 ]
 
 { #category : #tests }
@@ -113,12 +113,12 @@ CTCategoryTest >> testApplicativeCollectionTwoArgsBlocks [
 	| blocks |
 	blocks := { 
 		          [ :i :j | i + j ].
-		          [ :i :j | i * j ] } asCollectionCategory.
+		          [ :i :j | i * j ] } asCategory.
 
 	self
-		assert: { 3. 4 } asCollectionCategory
-			<*> ({ 1. 2 } asCollectionCategory <*> blocks)
-		equals: { 4. 5. 5. 6. 3. 4. 6. 8 } asCollectionCategory
+		assert: { 3. 4 } asCategory
+			<*> ({ 1. 2 } asCategory <*> blocks)
+		equals: { 4. 5. 5. 6. 3. 4. 6. 8 } asCategory
 ]
 
 { #category : #tests }
@@ -171,14 +171,14 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableLists [
 		assert: (CTCategory collection new sequenceAsequenceable: ({ 
 					  { 1. 2. 3 }.
 					  { 4. 5. 6. 7 }.
-					  { 8. 9 } } collect: [ :each | each asCollectionCategory ]))
+					  { 8. 9 } } collect: [ :each | each asCategory ]))
 		equals:
 			#( #( 1 4 8 ) #( 1 4 9 ) #( 1 5 8 ) #( 1 5 9 ) #( 1 6 8 )
 			   #( 1 6 9 ) #( 1 7 8 ) #( 1 7 9 ) #( 2 4 8 ) #( 2 4 9 )
 			   #( 2 5 8 ) #( 2 5 9 ) #( 2 6 8 ) #( 2 6 9 ) #( 2 7 8 )
 			   #( 2 7 9 ) #( 3 4 8 ) #( 3 4 9 ) #( 3 5 8 ) #( 3 5 9 )
 			   #( 3 6 8 ) #( 3 6 9 ) #( 3 7 8 ) #( 3 7 9 ) )
-				asCollectionCategory
+				asCategory
 ]
 
 { #category : #tests }
@@ -191,8 +191,8 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableListsWithEmpty [
 					  { 1. 2. 3 }.
 					  { 4. 5. 6. 7 }.
 					  { 8. 9 }.
-					  {  } } collect: [ :each | each asCollectionCategory ]))
-		equals: {  } asCollectionCategory
+					  {  } } collect: [ :each | each asCategory ]))
+		equals: {  } asCategory
 ]
 
 { #category : #tests }
@@ -218,8 +218,8 @@ CTCategoryTest >> testApplicativeSequenceLists [
 
 	self
 		assert: ((CTCategory collection new sequenceA: { 
-					  { 1. 2. 3 } asCollectionCategory.
-					  { 4. 5. 6 } asCollectionCategory } asLinkedList firstLink)
+					  { 1. 2. 3 } asCategory.
+					  { 4. 5. 6 } asCategory } asLinkedList firstLink)
 				 argument collect: #asArray)
 		equals:
 			#( #( 1 4 ) #( 1 5 ) #( 1 6 ) #( 2 4 ) #( 2 5 ) #( 2 6 ) #( 3 4 )
@@ -256,7 +256,7 @@ CTCategoryTest >> testMonadCountdownCollection [
 		timeLimit: 1 minute.
 
 	self
-		deny: (50000 asWriterCategory: {  } asCollectionCategory)
+		deny: (50000 asWriterCategory: {  } asCategory)
 			>>= [ :n :category | 
 				self withWriterCountdown: n collectionCategory: category ]
 		equals: nil
@@ -306,16 +306,16 @@ ghci> h 3
 	f := [ :x | 
 	     { 
 		     x.
-		     x negated } asCollectionCategory ].
+		     x negated } asCategory ].
 
 	g := [ :x | 
 	     { 
 		     (x * 3).
-		     (x * 2) } asCollectionCategory ].
+		     (x * 2) } asCategory ].
 
 	self
 		assert: f >=> g ! 3
-		equals: { 9. -9. 6. -6 } asCollectionCategory
+		equals: { 9. -9. 6. -6 } asCategory
 ]
 
 { #category : #tests }
@@ -334,10 +334,10 @@ CTCategoryTest >> testMonadGuardInBind [
 	"[1..50] >>= (\x -> guard ('7' `elem` show x) >> return x)"
 
 	self
-		assert: (1 to: 50) asCollectionCategory >>= [ :each :category | 
+		assert: (1 to: 50) asCategory >>= [ :each :category | 
 			(category guard: (each asString includes: $7))
 			>> (category return: each) ]
-		equals: { 7. 17. 27. 37. 47 } asCollectionCategory
+		equals: { 7. 17. 27. 37. 47 } asCategory
 ]
 
 { #category : #tests }
@@ -346,24 +346,24 @@ CTCategoryTest >> testMonadList [
 	"[3,4,5] >>= \x -> [x,-x]"
 
 	self
-		assert: { 3. 4. 5 } asCollectionCategory
-			>>= [ :x | (Array with: x with: x negated) asCollectionCategory ]
-		equals: { 3. -3. 4. -4. 5. -5 } asCollectionCategory.
+		assert: { 3. 4. 5 } asCategory
+			>>= [ :x | (Array with: x with: x negated) asCategory ]
+		equals: { 3. -3. 4. -4. 5. -5 } asCategory.
 
 	"[1,2,3] >>= \x -> []"
 	self
-		assert: { 3. 4. 5 } asCollectionCategory
-			>>= [ :x | {  } asCollectionCategory ]
-		equals: {  } asCollectionCategory.
+		assert: { 3. 4. 5 } asCategory
+			>>= [ :x | {  } asCategory ]
+		equals: {  } asCategory.
 
 	"[1,2] >>= \n -> ['a','b'] >>= \ch -> return (n, ch)"
 	self
-		assert: { 1. 2 } asCollectionCategory >>= [ :n | 
-			{ $a. $b } asCollectionCategory
+		assert: { 1. 2 } asCategory >>= [ :n | 
+			{ $a. $b } asCategory
 			>>= [ :char :category | 
 			category return: (Array with: n with: char) ] ]
 		equals:
-		#( #( 1 $a ) #( 1 $b ) #( 2 $a ) #( 2 $b ) ) asCollectionCategory
+		#( #( 1 $a ) #( 1 $b ) #( 2 $a ) #( 2 $b ) ) asCategory
 ]
 
 { #category : #tests }
@@ -437,13 +437,13 @@ CTCategoryTest >> testMonadWithGotNumberStringWriter [
 	self
 		assert: (self withGotNumberStringWriter: 3) >>= [ :x | 
 			(self withGotNumberStringWriter: 5) >>= [ :y :category | 
-			(category tell: { 'Gonna multiply these two' } asCollectionCategory)
+			(category tell: { 'Gonna multiply these two' } asCategory)
 			>>= [ :shouldBeNil | 
 				self assert: shouldBeNil equals: nil.
 				category return: x * y ] ] ]
 		equals: (15 asWriterCategory:
 				 { 'got number: 3'. 'got number: 5'. 'Gonna multiply these two' }
-					 asCollectionCategory)
+					 asCategory)
 ]
 
 { #category : #tests }
@@ -463,13 +463,13 @@ CTCategoryTest >> testMonadWriterGCD [
 
 	self
 		assert:
-			(897542437 -> 854797 asWriterCategory: {  } asCollectionCategory)
+			(897542437 -> 854797 asWriterCategory: {  } asCategory)
 			>>= [ :anAssoc :category | 
 				self withWriter: anAssoc key gcd: anAssoc value category: category ]
 		equals: (1 asWriterCategory:
 				 { '897542437 mod: 854797 = 5587'. '854797 mod: 5587 = 5573'.
 				 '5587 mod: 5573 = 14'. '5573 mod: 14 = 1'. '14 mod: 1 = 0'.
-				 'Finished with: 1' } asCollectionCategory)
+				 'Finished with: 1' } asCategory)
 ]
 
 { #category : #tests }
@@ -495,9 +495,9 @@ CTCategoryTest >> testMonoidmappendCollection [
 	"[1,2,3] `mappend` [4,5,6]"
 
 	self
-		assert: ({ 1. 2. 3 } asCollectionCategory mappend:
-				 { 4. 5. 6 } asCollectionCategory)
-		equals: { 1. 2. 3. 4. 5. 6 } asCollectionCategory
+		assert: ({ 1. 2. 3 } asCategory mappend:
+				 { 4. 5. 6 } asCategory)
+		equals: { 1. 2. 3. 4. 5. 6 } asCategory
 ]
 
 { #category : #tests }
@@ -529,14 +529,14 @@ CTCategoryTest >> testMonoidmappendStrings [
 
 	self
 		assert:
-			(('one' asCollectionCategory mappend: 'two' asCollectionCategory) 
-				 mappend: 'three' asCollectionCategory)
-		equals: 'onetwothree' asCollectionCategory.
+			(('one' asCategory mappend: 'two' asCategory) 
+				 mappend: 'three' asCategory)
+		equals: 'onetwothree' asCategory.
 
 	self
-		assert: ('one' asCollectionCategory mappend:
-				 ('two' asCollectionCategory mappend: 'three' asCollectionCategory))
-		equals: 'onetwothree' asCollectionCategory
+		assert: ('one' asCategory mappend:
+				 ('two' asCategory mappend: 'three' asCategory))
+		equals: 'onetwothree' asCategory
 ]
 
 { #category : #tests }
@@ -546,10 +546,10 @@ CTCategoryTest >> testMonoidmconcat [
 
 	self
 		assert: (CTCategory collection new mconcat: { 
-					 { 1. 2 } asCollectionCategory.
-					 { 3. 6 } asCollectionCategory.
-					 { 9 } asCollectionCategory })
-		equals: { 1. 2. 3. 6. 9 } asCollectionCategory
+					 { 1. 2 } asCategory.
+					 { 3. 6 } asCategory.
+					 { 9 } asCategory })
+		equals: { 1. 2. 3. 6. 9 } asCategory
 ]
 
 { #category : #tests }
@@ -567,7 +567,7 @@ CTCategoryTest >> testMonoidmconcatProduct [
 CTCategoryTest >> withGotNumberStringWriter: x [
 
 	^ x asWriterCategory:
-		  { ('got number: ' , x asString) } asCollectionCategory
+		  { ('got number: ' , x asString) } asCategory
 ]
 
 { #category : #tests }
@@ -587,14 +587,14 @@ gcd' a b
 	^ b = 0
 		  ifTrue: [ 
 			  (category tell:
-				   { ('Finished with: ' , a asString) } asCollectionCategory)
+				   { ('Finished with: ' , a asString) } asCategory)
 			  >>= [ :_ :c | c return: a ] ]
 		  ifFalse: [ 
 			  | mod |
 			  mod := a rem: b.
 			  (category tell:
 				   { (a asString , ' mod: ' , b asString , ' = ' , mod asString) }
-					   asCollectionCategory)
+					   asCategory)
 			  >>= [ :_ :c | self withWriter: b gcd: mod category: c ] ]
 ]
 
@@ -644,10 +644,10 @@ finalCountDown :: Int -> Writer [String] ()
 "
 
 	^ n = 0
-		  ifTrue: [ category tell: { 0 asString } asCollectionCategory ]
+		  ifTrue: [ category tell: { 0 asString } asCategory ]
 		  ifFalse: [ 
 			  (self withWriterCountdown: n - 1 collectionCategory: category)
-			  >>= [ :result :c | c tell: { n asString } asCollectionCategory ] ]
+			  >>= [ :result :c | c tell: { n asString } asCategory ] ]
 ]
 
 { #category : #tests }
