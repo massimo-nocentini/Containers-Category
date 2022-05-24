@@ -9,15 +9,19 @@ Object >> asCategory [
 ]
 
 { #category : #'*Containers-Category' }
-Object >> asJustMaybeCategory [
+Object >> asJustMaybe [
 
-	^ CTCategory maybe just: self
+	^ CTCategoryJustMaybe new
+		  object: self;
+		  yourself
 ]
 
 { #category : #'*Containers-Category' }
-Object >> asNothingMaybeCategory [
+Object >> asNothingMaybe [
 
-	^ CTCategory maybe nothing
+	^ CTCategoryNothingMaybe new
+		  object: self;
+		  yourself
 ]
 
 { #category : #'*Containers-Category' }

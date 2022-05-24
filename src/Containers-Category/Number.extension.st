@@ -15,9 +15,3 @@ Number >> asSumNumber [
 		  object: self;
 		  yourself
 ]
-
-{ #category : #'*Containers-Category' }
-Number >> asSumNumberCategory [
-
-	^ CTCategory number sum on: self
-]

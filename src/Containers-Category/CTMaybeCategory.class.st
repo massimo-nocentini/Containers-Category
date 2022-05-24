@@ -39,5 +39,5 @@ CTMaybeCategory >> mempty [
 { #category : #applicative }
 CTMaybeCategory >> pure: object [
 
-	^ object asJustMaybeCategory
+	^ object asJustMaybe asCategory
 ]

@@ -127,13 +127,13 @@ CTCategoryTest >> testApplicativeLiftA2ApplicativeMaybeCollection [
 	"liftA2 (:) (Just 3) (Just [4])"
 
 	| aJust |
-	aJust := 3 asJustMaybeCategory
-		         applicative: (4 ~~> nil) asJustMaybeCategory
+	aJust := 3 asJustMaybe asCategory
+		         applicative: (4 ~~> nil) asJustMaybe asCategory
 		         lift: [ :obj :aLink | obj ~~> aLink ].
 
 	self
 		assert: aJust argument asArray
-		equals: (3 ~~> (4 ~~> nil)) asJustMaybeCategory argument asArray
+		equals: (3 ~~> (4 ~~> nil)) asJustMaybe asCategory argument asArray
 ]
 
 { #category : #tests }
@@ -142,11 +142,12 @@ CTCategoryTest >> testApplicativeSequence [
 	"sequenceA [Just 3, Just 2, Just 1]"
 
 	self
-		assert: (CTCategory maybe new sequenceA: 3 asJustMaybeCategory
-				 ~~> (2 asJustMaybeCategory ~~> (1 asJustMaybeCategory ~~> nil)))
+		assert: (CTCategory maybe new sequenceA: 3 asJustMaybe asCategory
+				 ~~>
+				 (2 asJustMaybe asCategory ~~> (1 asJustMaybe asCategory ~~> nil)))
 				argument asArray
 		equals:
-		(3 ~~> (2 ~~> (1 ~~> nil))) asJustMaybeCategory argument asArray
+		(3 ~~> (2 ~~> (1 ~~> nil))) asJustMaybe asCategory argument asArray
 ]
 
 { #category : #tests }
@@ -156,10 +157,10 @@ CTCategoryTest >> testApplicativeSequenceAsequenceableJusts [
 
 	self
 		assert: (CTCategory maybe new sequenceAsequenceable: { 
-					 3 asJustMaybeCategory.
-					 2 asJustMaybeCategory.
-					 1 asJustMaybeCategory })
-		equals: { 3. 2. 1 } asJustMaybeCategory
+					 3 asJustMaybe asCategory.
+					 2 asJustMaybe asCategory.
+					 1 asJustMaybe asCategory })
+		equals: { 3. 2. 1 } asJustMaybe asCategory
 ]
 
 { #category : #tests }
@@ -286,10 +287,10 @@ foo = Just 3   >>= (\x ->
 	"
 
 	self
-		assert: 3 asJustMaybeCategory >>= [ :x | 
-			'!' asJustMaybeCategory
-			>>= [ :y | (x asString , y) asJustMaybeCategory ] ]
-		equals: '3!' asJustMaybeCategory
+		assert: 3 asJustMaybe asCategory >>= [ :x | 
+			'!' asJustMaybe asCategory
+			>>= [ :y | (x asString , y) asJustMaybe asCategory ] ]
+		equals: '3!' asJustMaybe asCategory
 ]
 
 { #category : #tests }
@@ -325,7 +326,7 @@ CTCategoryTest >> testMonadGuard [
 
 	self
 		assert: (CTCategory maybe new guard: 5 > 2)
-		equals: nil asJustMaybeCategory
+		equals: nil asJustMaybe asCategory
 ]
 
 { #category : #tests }
@@ -372,14 +373,14 @@ CTCategoryTest >> testMonadMaybe [
 	"Just 9 >>= \x -> return (x*10)"
 
 	self
-		assert:
-		9 asJustMaybeCategory >>= [ :x :category | category return: x * 10 ]
-		equals: (9 * 10) asJustMaybeCategory.
+		assert: 9 asJustMaybe asCategory
+			>>= [ :x :category | category return: x * 10 ]
+		equals: (9 * 10) asJustMaybe asCategory.
 
 	self
-		assert: CTCategory maybe nothing
+		assert: self asNothingMaybe asCategory
 			>>= [ :x :category | category return: x * 10 ]
-		equals: CTCategory maybe nothing
+		equals: self asNothingMaybe asCategory
 ]
 
 { #category : #tests }
@@ -399,7 +400,7 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 
 	self
 		assert: (pole maybeLandLeft: 10) value
-		equals: CTCategory maybe nothing.
+		equals: self asNothingMaybe asCategory.
 
 	"return (0, 0) >>= landRight 2 >>= landLeft 2 >>= landRight 2"
 	self
@@ -410,7 +411,7 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 		equals: (CTCategoryPole new
 				 left: 2;
 				 right: 4;
-				 yourself) asJustMaybeCategory.
+				 yourself) asJustMaybe asCategory.
 
 	self
 		assert: (pole -! [ :p | p landLeft: 1 ] -! [ :p | p landRight: 4 ]
@@ -422,13 +423,13 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 			(CTCategory maybe new return: pole) >>= [ :p | p maybeLandLeft: 1 ]
 			>>= [ :p | p maybeLandRight: 4 ] >>= [ :p | p maybeLandLeft: -1 ]
 			>>= [ :p | p maybeLandRight: -2 ]
-		equals: CTCategory maybe nothing.
+		equals: self asNothingMaybe asCategory.
 
 	self
 		assert:
 			(CTCategory maybe new return: pole) >>= [ :p | p maybeLandLeft: 1 ]
 			>>= [ :p | p maybeBanana ] >>= [ :p | p maybeLandRight: 1 ]
-		equals: CTCategory maybe nothing
+		equals: self asNothingMaybe asCategory
 ]
 
 { #category : #tests }
@@ -506,9 +507,10 @@ CTCategoryTest >> testMonoidmappendMaybeProduct [
 	"Just (Product 3) `mappend` Just (Product 4)"
 
 	self
-		assert: (3 asProductNumber asCategory asJustMaybeCategory mappend:
-				 9 asProductNumber asCategory asJustMaybeCategory)
-		equals: 27 asProductNumber asCategory asJustMaybeCategory
+		assert:
+			(3 asProductNumber asCategory asJustMaybe asCategory mappend:
+				 9 asProductNumber asCategory asJustMaybe asCategory)
+		equals: 27 asProductNumber asCategory asJustMaybe asCategory
 ]
 
 { #category : #tests }
