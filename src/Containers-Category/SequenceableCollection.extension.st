@@ -25,20 +25,24 @@ powerset xs = filterM (\x -> [True, False]) xs
 SequenceableCollection >> select: aBlock monad: aMonad [
 
 	"
-filterM          :: (Applicative m) => (a -> m Bool) -> [a] -> m [a]
-filterM p        = foldr (\ x -> liftA2 (\ flg -> if flg then (x:) else id) (p x)) (pure [])
-"
+filterM :: (Monad m) => (a -> m Bool) -> [a] -> m [a]
+filterM _ [] = return []
+filterM p (x:xs) = do
+flg <- p x
+ys <- filterM p xs
+return (if flg then x:ys else ys)
+	"
 
-	| foldedMonad |
-	foldedMonad := self
-		               foldr: [ :each :folded | 
-			               | eachMonad |
-			               eachMonad := aBlock value: each.
-			               eachMonad applicative: folded lift: [ :flg :rest | 
-				               flg
-					               ifTrue: [ each ~~> rest ]
-					               ifFalse: [ rest ] ] ]
-		               init: (aMonad return: nil).
+	^ self ifEmpty: [ aMonad return: self ] ifNotEmpty: [ 
+		  aBlock ! self first >>= [ :aBoolean :cat | 
+		  | restMonad |
+		  restMonad := self allButFirst select: aBlock monad: cat.
 
-	^ foldedMonad fmap: [ :link | link asLinkedList asArray ]
+		  restMonad >>= [ :aLink :finalCat | 
+		  | newLink |
+		  newLink := aBoolean
+			             ifTrue: [ self class with: self first withAll: aLink ]
+			             ifFalse: [ aLink ].
+
+		  finalCat return: newLink ] ] ]
 ]

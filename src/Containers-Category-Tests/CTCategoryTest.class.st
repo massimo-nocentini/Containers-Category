@@ -637,10 +637,12 @@ CTCategoryTest >> testMonadSelectM [
 		and: ({ 9. 1. 5. 2. 10. 3 }
 				 select: [ :each | self keepSmall: each ]
 				 monad: cat)
-		equals: ({ 1. 2. 3 } asWriterCategory:
-				 #( 'Keeping 3' '10 is too large, throwing it away'
-				    'Keeping 2' '5 is too large, throwing it away'
-				    'Keeping 1' '9 is too large, throwing it away' ) asCategory)
+		equals:
+			({ 1. 2. 3 } asWriterCategory:
+				 #( '9 is too large, throwing it away'
+				    'Keeping 1' '5 is too large, throwing it away'
+				    'Keeping 2' '10 is too large, throwing it away'
+				    'Keeping 3' ) asCategory)
 ]
 
 { #category : #tests }
