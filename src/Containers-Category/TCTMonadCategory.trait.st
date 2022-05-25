@@ -46,13 +46,7 @@ TCTMonadCategory >> guard: aBoolean [
 { #category : #splitjoin }
 TCTMonadCategory >> join [
 
-	^ self join: self
-]
-
-{ #category : #splitjoin }
-TCTMonadCategory >> join: aMonadOfMonad [
-
-	^ aMonadOfMonad >>= [ :aMonad | aMonad ]
+	^ self >>= [ :aMonad | aMonad ]
 ]
 
 { #category : #applicative }
