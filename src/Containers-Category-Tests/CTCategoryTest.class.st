@@ -19,6 +19,45 @@ CTCategoryTest >> addDrinkWithPriceWriter: x [
 ]
 
 { #category : #tests }
+CTCategoryTest >> flipThree [
+
+	"
+data Coin = Heads | Tails deriving (Show, Eq)
+coin :: Prob Coin
+coin = Prob [(Heads,1%2),(Tails,1%2)]
+loadedCoin :: Prob Coin
+loadedCoin = Prob [(Heads,1%10),(Tails,9%10)]
+
+
+flipThree :: Prob Bool
+flipThree = do
+    a <- coin
+    b <- coin
+    c <- loadedCoin
+    return (all (==Tails) [a,b,c])
+	"
+
+	| coin loadedCoin |
+	coin := CTUniformRandomCategory on: { 
+			        (#head -> (1 / 2)).
+			        (#tail -> (1 / 2)) } asCategory.
+
+	loadedCoin := CTUniformRandomCategory on: { 
+			              (#head -> (1 / 10)).
+			              (#tail -> (9 / 10)) } asCategory.
+
+	^ coin >>= [ :a | 
+	  coin >>= [ :b | 
+	  loadedCoin >>= [ :c :cat | 
+	  | allTails |
+	  allTails := { 
+		              a.
+		              b.
+		              c } allSatisfy: [ :each | each = #tail ].
+	  cat return: allTails ] ] ]
+]
+
+{ #category : #tests }
 CTCategoryTest >> keepSmall: each [
 
 	"
@@ -620,6 +659,16 @@ CTCategoryTest >> testMonadPowerset [
 			#( #( 1 2 3 4 ) #( 1 2 3 ) #( 1 2 4 ) #( 1 2 ) #( 1 3 4 )
 			   #( 1 3 ) #( 1 4 ) #( 1 ) #( 2 3 4 ) #( 2 3 ) #( 2 4 ) #( 2 )
 			   #( 3 4 ) #( 3 ) #( 4 ) #(  ) ) asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadProb [
+
+	"[3,4,5] >>= \x -> [x,-x]"
+
+	self
+		assert: self flipThree
+		equals: { 3. -3. 4. -4. 5. -5 } asCategory
 ]
 
 { #category : #tests }
