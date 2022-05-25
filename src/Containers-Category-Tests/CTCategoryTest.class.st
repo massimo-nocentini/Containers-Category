@@ -54,6 +54,7 @@ flipThree = do
 		              a.
 		              b.
 		              c } allSatisfy: [ :each | each = #tail ].
+
 	  cat return: allTails ] ] ]
 ]
 
@@ -349,6 +350,24 @@ CTCategoryTest >> testApplicativeSequenceLists [
 		equals:
 			#( #( 1 4 ) #( 1 5 ) #( 1 6 ) #( 2 4 ) #( 2 5 ) #( 2 6 ) #( 3 4 )
 			   #( 3 5 ) #( 3 6 ) )
+]
+
+{ #category : #tests }
+CTCategoryTest >> testFunctorProb [
+
+	"
+fmap negate (Prob [(3,1%2),(5,1%4),(9,1%4)])
+	"
+
+	self
+		assert: ((CTUniformRandomCategory on: { 
+					  (3 -> (1 / 2)).
+					  (5 -> (1 / 4)).
+					  (9 -> (1 / 4)) } asCategory) fmap: [ :each | each negated ])
+		equals: (CTUniformRandomCategory on: { 
+					 (-3 -> (1 / 2)).
+					 (-5 -> (1 / 4)).
+					 (-9 -> (1 / 4)) } asCategory)
 ]
 
 { #category : #tests }
@@ -666,9 +685,15 @@ CTCategoryTest >> testMonadProb [
 
 	"[3,4,5] >>= \x -> [x,-x]"
 
-	self
-		assert: self flipThree
-		equals: { 3. -3. 4. -4. 5. -5 } asCategory
+	self assert: self flipThree equals: (CTUniformRandomCategory on: { 
+				 (false -> (1 / 40)).
+				 (false -> (9 / 40)).
+				 (false -> (1 / 40)).
+				 (false -> (9 / 40)).
+				 (false -> (1 / 40)).
+				 (false -> (9 / 40)).
+				 (false -> (1 / 40)).
+				 (true -> (9 / 40)) } asCategory)
 ]
 
 { #category : #tests }

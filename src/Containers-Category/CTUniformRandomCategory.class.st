@@ -9,24 +9,7 @@ Class {
 { #category : #monad }
 CTUniformRandomCategory >> >>= aBlock [
 
-	"
-flatten :: Prob (Prob a) -> Prob a
-flatten (Prob xs) = Prob $ concat $ map multAll xs
-    where multAll (Prob innerxs, p) = map (\(x, r) -> (x, p*r)) innerxs
-	"
-
-	| aMonadOfMonad flatten |
-	aMonadOfMonad := self fmap: [ :each | 
-		                 (aBlock cull: each cull: self) argument ].
-
-	flatten := aMonadOfMonad argument flatCollect: [ :anAssoc | 
-		           | aProbMonad p |
-		           aProbMonad := anAssoc key.
-		           p := anAssoc value.
-		           aProbMonad argument collect: [ :each | 
-			           each key -> (each value * p) ] ].
-
-	^ self class on: flatten asCategory
+	^ (self fmap: [ :each | aBlock cull: each cull: self ]) join
 ]
 
 { #category : #monad }
@@ -45,6 +28,20 @@ instance Functor Prob where
 
 	^ self class on: (self argument fmap: [ :anAssoc | 
 			   aBlock ! anAssoc key -> anAssoc value ])
+]
+
+{ #category : #splitjoin }
+CTUniformRandomCategory >> join [
+
+	| flatten |
+	flatten := self argument fmap: [ :anAssoc | 
+		           | aProbMonad p |
+		           aProbMonad := anAssoc key.
+		           p := anAssoc value.
+		           aProbMonad argument fmap: [ :each | 
+			           each key -> (each value * p) ] ].
+
+	^ self class on: flatten join
 ]
 
 { #category : #monad }
