@@ -19,6 +19,53 @@ CTCategoryTest >> addDrinkWithPriceWriter: x [
 ]
 
 { #category : #tests }
+CTCategoryTest >> keepSmall: each [
+
+	"
+keepSmall :: Int -> Writer [String] Bool
+keepSmall x
+    | x < 4 = do
+        tell [""Keeping "" ++ show x]
+        return True
+    | otherwise = do
+        tell [show x ++ "" is too large, throwing it away""]
+        return False
+	"
+
+	^ each < 4
+		  ifTrue: [ 
+		  true asWriterCategory: { ('Keeping ' , each asString) } asCategory ]
+		  ifFalse: [ 
+			  false asWriterCategory:
+				  { (each asString , ' is too large, throwing it away') }
+					  asCategory ]
+]
+
+{ #category : #tests }
+CTCategoryTest >> keepSmall: each cat: cat [
+
+	"
+keepSmall :: Int -> Writer [String] Bool
+keepSmall x
+    | x < 4 = do
+        tell [""Keeping "" ++ show x]
+        return True
+    | otherwise = do
+        tell [show x ++ "" is too large, throwing it away""]
+        return False
+	"
+
+	^ each < 4
+		  ifTrue: [ 
+			  (cat tell: { ('Keeping ' , each asString) } asCategory)
+			  >>= [ :_ :c | c return: true ] ]
+		  ifFalse: [ 
+			  (cat tell:
+				   { (each asString , ' is too large, throwing it away') }
+					   asCategory) >>= [ :_ :c | c return: false ] ]
+]
+
+{ #category : #tests }
 CTCategoryTest >> moreStuffMonad [
 
 	^ self stackManipMonad >>= [ :a :cat | 
@@ -267,6 +314,24 @@ CTCategoryTest >> testApplicativeSequenceLists [
 ]
 
 { #category : #tests }
+CTCategoryTest >> testMonadApplicativeM [
+
+	"[(+1),(+2),(+3)] `ap` [10,11]"
+
+	| aMonad anotherMonad |
+	aMonad := { 10. 11 } asCategory.
+	anotherMonad := { 
+		                [ :x | x + 1 ].
+		                [ :x | x + 2 ].
+		                [ :x | x + 3 ] } asCategory.
+
+	self
+		assert: aMonad <*> anotherMonad
+		and: (aMonad applicativeM: anotherMonad)
+		equals: { 11. 12. 12. 13. 13. 14 } asCategory
+]
+
+{ #category : #tests }
 CTCategoryTest >> testMonadBlock [
 
 	"
@@ -378,6 +443,47 @@ CTCategoryTest >> testMonadGuardInBind [
 			(category guard: (each asString includes: $7))
 			>> (category return: each) ]
 		equals: { 7. 17. 27. 37. 47 } asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadJoinCollections [
+
+	"join [[1,2,3],[4,5,6]]"
+
+	^ self
+		  assert: { 
+				  { 1. 2. 3 } asCategory.
+				  { 4. 5. 6 } asCategory } asCategory join
+		  equals: { 1. 2. 3. 4. 5. 6 } asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadJoinState [
+
+	"runState (join (state $ \s -> (push 10, 1:2:s))) [0,0,0]"
+
+	| aMonad anAssoc |
+	aMonad := [ :s | (self push: 10) -> (1 ~~> (2 ~~> s)) ] asState
+		          asCategory join.
+
+	anAssoc := aMonad argument ! { 0. 0. 0 } asLinkedList firstLink.
+
+	self assert: anAssoc key equals: nil.
+
+	^ self
+		  assert: anAssoc value asLinkedList asArray
+		  equals: { 10. 1. 2. 0. 0. 0 }
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadJoinWriter [
+
+	"runWriter $ join (Writer (Writer (1, 'aaa'), 'bbb'))"
+
+	^ self
+		  assert: ((1 asWriterCategory: 'aaa' asCategory) asWriterCategory:
+				   'bbb' asCategory) join
+		  equals: (1 asWriterCategory: 'bbbaaa' asCategory)
 ]
 
 { #category : #tests }
@@ -501,6 +607,40 @@ CTCategoryTest >> testMonadPierrePoleWalking [
 			(CTMaybeCategory new return: pole) >>= [ :p | p maybeLandLeft: 1 ]
 			>>= [ :p | p maybeBanana ] >>= [ :p | p maybeLandRight: 1 ]
 		equals: self asNothingMaybe asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadPowerset [
+
+	"powerset [1,2,3]"
+
+	self
+		assert: { 1. 2. 3. 4 } powersetM
+		equals:
+			#( #( 1 2 3 4 ) #( 1 2 3 ) #( 1 2 4 ) #( 1 2 ) #( 1 3 4 )
+			   #( 1 3 ) #( 1 4 ) #( 1 ) #( 2 3 4 ) #( 2 3 ) #( 2 4 ) #( 2 )
+			   #( 3 4 ) #( 3 ) #( 4 ) #(  ) ) asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadSelectM [
+
+	"fst $ runWriter $ filterM keepSmall [9,1,5,2,10,3]"
+
+	| cat |
+	cat := nil asWriterCategory: {  } asCategory.
+
+	self
+		assert: ({ 9. 1. 5. 2. 10. 3 }
+				 select: [ :each | self keepSmall: each cat: cat ]
+				 monad: cat)
+		and: ({ 9. 1. 5. 2. 10. 3 }
+				 select: [ :each | self keepSmall: each ]
+				 monad: cat)
+		equals: ({ 1. 2. 3 } asWriterCategory:
+				 #( 'Keeping 3' '10 is too large, throwing it away'
+				    'Keeping 2' '5 is too large, throwing it away'
+				    'Keeping 1' '9 is too large, throwing it away' ) asCategory)
 ]
 
 { #category : #tests }
