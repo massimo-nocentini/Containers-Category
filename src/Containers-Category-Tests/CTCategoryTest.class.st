@@ -452,6 +452,15 @@ CTCategoryTest >> testMonadJoinCollections [
 		  assert: { 
 				  { 1. 2. 3 } asCategory.
 				  { 4. 5. 6 } asCategory } asCategory join
+		  and: { 
+				  { 
+					  { 1 } asCategory.
+					  { 2 } asCategory.
+					  { 3 } asCategory } asCategory.
+				  { 
+					  { 4 } asCategory.
+					  { 5 } asCategory.
+					  { 6 } asCategory } asCategory } asCategory join join
 		  equals: { 1. 2. 3. 4. 5. 6 } asCategory
 ]
 
