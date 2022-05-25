@@ -13,21 +13,6 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #applicative }
-CTBlockClosureCategory >> <*> anApplicative [
-
-	"
-
-instance Applicative ((->) r) where
-	pure x = (\_ -> x)
-	f <*> g = \x -> f x (g x)
-	
-	"
-
-	^ [ :x | anApplicative argument ! x ! (self argument ! x) ]
-		  asCategory
-]
-
 { #category : #monad }
 CTBlockClosureCategory >> >>= aBlock [
 
@@ -45,30 +30,8 @@ CTBlockClosureCategory >> >>= aBlock [
 	  b ] asCategory
 ]
 
-{ #category : #functor }
-CTBlockClosureCategory >> fmap: aBlock [
+{ #category : #monad }
+CTBlockClosureCategory >> return: anObject [
 
-	"
-	instance Functor ((->) r) where
-		fmap f g = (\x -> f (g x))
-	"
-
-	^ [ :object | 
-	  | value |
-	  value := self argument value: object.
-	  aBlock ! value ] asCategory
-]
-
-{ #category : #applicative }
-CTBlockClosureCategory >> pure: object [
-
-	"
-
-instance Applicative ((->) r) where
-	pure x = (\_ -> x)
-	f <*> g = \x -> f x (g x)
-	
-	"
-
-	^ [ :useless | object ] asCategory
+	^ [ :useless | anObject ] asCategory
 ]

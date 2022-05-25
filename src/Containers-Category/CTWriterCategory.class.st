@@ -30,16 +30,6 @@ CTWriterCategory class >> on: aMonoid [
 		  yourself
 ]
 
-{ #category : #applicative }
-CTWriterCategory >> <*> anApplicative [
-
-	| aWriter |
-	aWriter := self fmap: anApplicative argument.
-
-	^ aWriter argument asWriterCategory:
-		  (aWriter log mappend: anApplicative log)
-]
-
 { #category : #comparing }
 CTWriterCategory >> = anObject [
 
@@ -51,28 +41,11 @@ CTWriterCategory >> = anObject [
 { #category : #monad }
 CTWriterCategory >> >>= aBlock [
 
-	| aWriterMonad newArgument |
-	"
-
-	(a -> b) -> m a -> m b 
-	m (a -> b) -> m a -> m b
-	(a -> m b) -> m a -> m b
-	
-	"
+	| aWriterMonad |
 	aWriterMonad := aBlock cull: self argument cull: self.
 
-	newArgument := aWriterMonad argument.
-
-	aWriterMonad := [ :arg | newArgument ] asWriterCategory:
-		                aWriterMonad log.
-
-	^ self <*> aWriterMonad
-]
-
-{ #category : #functor }
-CTWriterCategory >> fmap: aBlock [
-
-	^ (aBlock value: self argument) asWriterCategory: self log
+	^ aWriterMonad argument asWriterCategory:
+		  (self log mappend: aWriterMonad log)
 ]
 
 { #category : #comparing }
@@ -122,8 +95,8 @@ CTWriterCategory >> pass [
 		  (anArray second value: self log)
 ]
 
-{ #category : #applicative }
-CTWriterCategory >> pure: anObject [
+{ #category : #monad }
+CTWriterCategory >> return: anObject [
 
 	^ anObject asWriterCategory: self log mempty
 ]

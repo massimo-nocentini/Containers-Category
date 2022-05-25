@@ -36,8 +36,8 @@ CTMaybeCategory >> mempty [
 	^ self class nothing
 ]
 
-{ #category : #applicative }
-CTMaybeCategory >> pure: object [
+{ #category : #monad }
+CTMaybeCategory >> return: anObject [
 
-	^ object asJustMaybe asCategory
+	^ anObject asJustMaybe asCategory
 ]

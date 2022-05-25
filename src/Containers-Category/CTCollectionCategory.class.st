@@ -6,47 +6,19 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #applicative }
-CTCollectionCategory >> <*> anApplicativeOfBlocks [
-
-	| array i otherCollection collection |
-	collection := self argument.
-	otherCollection := anApplicativeOfBlocks argument.
-
-	array := Array new: collection size * otherCollection size.
-
-	i := 0.
-
-	otherCollection do: [ :eachBlock | 
-		| currified |
-		currified := eachBlock currified.
-
-		collection do: [ :eachValue | 
-			i := i + 1.
-			array at: i put: currified ! eachValue ] ].
-
-	^ self class on: array
-]
-
 { #category : #monad }
 CTCollectionCategory >> >>= aBlock [
 
-	^ self class on:
-		  ((self fmap: aBlock) argument flatCollect: [ :each | 
-			   each argument ])
+	"(a -> [b]) -> [a] -> [b]"
+
+	^ (self argument flatCollect: [ :each | 
+		   (aBlock cull: each cull: self) argument ]) asCategory
 ]
 
 { #category : #monad }
 CTCollectionCategory >> fail: aString [
 
 	^ self mempty
-]
-
-{ #category : #functor }
-CTCollectionCategory >> fmap: aBlock [
-
-	^ self class on:
-		  (self argument collect: [ :each | aBlock cull: each cull: self ])
 ]
 
 { #category : #monoid }
@@ -60,17 +32,17 @@ CTCollectionCategory >> mappend: aMonoid [
 	
 	"
 
-	^ self class on: self argument , aMonoid argument
+	^ (self argument , aMonoid argument) asCategory
 ]
 
 { #category : #monoid }
 CTCollectionCategory >> mempty [
 
-	^ self class on: {  }
+	^ {  } asCategory
 ]
 
-{ #category : #applicative }
-CTCollectionCategory >> pure: object [
+{ #category : #monad }
+CTCollectionCategory >> return: anObject [
 
-	^ self class on: { object }
+	^ { anObject } asCategory
 ]

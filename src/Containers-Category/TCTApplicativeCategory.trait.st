@@ -30,6 +30,12 @@ liftA2 f a b = f <$> a <*> b
 	^ anApplicative <*> (self <!> aTwoArgsBlock)
 ]
 
+{ #category : #functor }
+TCTApplicativeCategory >> fmap: aBlock [
+
+	^ self <*> (self pure: aBlock)
+]
+
 { #category : #applicative }
 TCTApplicativeCategory >> pure: object [
 

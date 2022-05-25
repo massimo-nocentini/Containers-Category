@@ -4,22 +4,10 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'as yet unclassified' }
-CTJustMaybeCategory >> <*> functorJust [
-
-	^ self fmap: functorJust argument
-]
-
 { #category : #monad }
 CTJustMaybeCategory >> >>= aBlock [
 
 	^ aBlock cull: self argument cull: self
-]
-
-{ #category : #'accessing - structure variables' }
-CTJustMaybeCategory >> fmap: aBlock [
-
-	^ self class on: (aBlock cull: self argument cull: self)
 ]
 
 { #category : #'as yet unclassified' }

@@ -202,12 +202,11 @@ CTCategoryTest >> testApplicativeCollectionTwoArgsBlocks [
 
 	| blocks |
 	blocks := { 
-		          [ :i :j | i + j ].
-		          [ :i :j | i * j ] } asCategory.
+		          [ :i :j | i + j ] currified.
+		          [ :i :j | i * j ] currified } asCategory.
 
 	self
-		assert: { 3. 4 } asCategory
-			<*> ({ 1. 2 } asCategory <*> blocks)
+		assert: { 3. 4 } asCategory <*> ({ 1. 2 } asCategory <*> blocks)
 		equals: { 4. 5. 5. 6. 3. 4. 6. 8 } asCategory
 ]
 
@@ -327,7 +326,6 @@ CTCategoryTest >> testMonadApplicativeM [
 
 	self
 		assert: aMonad <*> anotherMonad
-		and: (aMonad applicativeM: anotherMonad)
 		equals: { 11. 12. 12. 13. 13. 14 } asCategory
 ]
 
@@ -505,13 +503,6 @@ CTCategoryTest >> testMonadLiftMState [
 
 	| anAssoc |
 	anAssoc := (self pop fmap: [ :x | x + 100 ]) argument
-	           ! { 1. 2. 3. 4 } asLinkedList firstLink.
-
-	self assert: anAssoc key equals: 101.
-
-	self assert: anAssoc value asLinkedList asArray equals: { 2. 3. 4 }.
-
-	anAssoc := (self pop liftM: [ :x | x + 100 ]) argument
 	           ! { 1. 2. 3. 4 } asLinkedList firstLink.
 
 	self assert: anAssoc key equals: 101.

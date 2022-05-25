@@ -4,20 +4,8 @@ Class {
 	#category : #'Containers-Category'
 }
 
-{ #category : #'accessing - structure variables' }
-CTNothingMaybeCategory >> <*> functorJust [
-
-	^ self
-]
-
 { #category : #monad }
 CTNothingMaybeCategory >> >>= aBlock [
-
-	^ self
-]
-
-{ #category : #'accessing - structure variables' }
-CTNothingMaybeCategory >> fmap: aBlock [
 
 	^ self
 ]

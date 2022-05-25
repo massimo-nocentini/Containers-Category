@@ -5,6 +5,18 @@ Trait {
 	#category : #'Containers-Category'
 }
 
+{ #category : #applicative }
+TCTMonadCategory >> <*> aMonad [
+
+	"(Monad m) => m (a -> b) -> m a -> m b"
+
+	^ aMonad >>= [ :aBlock | 
+	  self >>= [ :a :cat | 
+	  | b |
+	  b := aBlock value: a.
+	  cat return: b ] ]
+]
+
 { #category : #monad }
 TCTMonadCategory >> >> aMonad [
 
@@ -15,18 +27,6 @@ TCTMonadCategory >> >> aMonad [
 TCTMonadCategory >> >>= aBlock [
 
 	self explicitRequirement
-]
-
-{ #category : #'as yet unclassified' }
-TCTMonadCategory >> applicativeM: aMonad [
-
-	"(Monad m) => m (a -> b) -> m a -> m b"
-
-	^ aMonad >>= [ :aBlock | 
-	  self >>= [ :a :cat | 
-	  | b |
-	  b := aBlock value: a.
-	  cat return: b ] ]
 ]
 
 { #category : #monad }
@@ -55,14 +55,14 @@ TCTMonadCategory >> join: aMonadOfMonad [
 	^ aMonadOfMonad >>= [ :aMonad | aMonad ]
 ]
 
-{ #category : #'as yet unclassified' }
-TCTMonadCategory >> liftM: aBlock [
+{ #category : #applicative }
+TCTMonadCategory >> pure: object [
 
-	^ self >>= [ :arg :cat | cat return: aBlock ! arg ]
+	^ self return: object
 ]
 
 { #category : #monad }
 TCTMonadCategory >> return: anObject [
 
-	^ self pure: anObject
+	self explicitRequirement
 ]
