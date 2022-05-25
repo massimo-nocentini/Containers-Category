@@ -38,13 +38,14 @@ flipThree = do
 	"
 
 	| coin loadedCoin |
-	coin := CTUniformRandomCategory on: { 
-			        (#head -> (1 / 2)).
-			        (#tail -> (1 / 2)) } asCategory.
+	coin := { 
+		        (#head -> (1 / 2)).
+		        (#tail -> (1 / 2)) } asProbabilityDistribution asCategory.
 
-	loadedCoin := CTUniformRandomCategory on: { 
-			              (#head -> (1 / 10)).
-			              (#tail -> (9 / 10)) } asCategory.
+	loadedCoin := { 
+		              (#head -> (1 / 10)).
+		              (#tail -> (9 / 10)) } asProbabilityDistribution
+		              asCategory.
 
 	^ coin >>= [ :a | 
 	  coin >>= [ :b | 
@@ -360,14 +361,15 @@ fmap negate (Prob [(3,1%2),(5,1%4),(9,1%4)])
 	"
 
 	self
-		assert: ((CTUniformRandomCategory on: { 
-					  (3 -> (1 / 2)).
-					  (5 -> (1 / 4)).
-					  (9 -> (1 / 4)) } asCategory) fmap: [ :each | each negated ])
-		equals: (CTUniformRandomCategory on: { 
-					 (-3 -> (1 / 2)).
-					 (-5 -> (1 / 4)).
-					 (-9 -> (1 / 4)) } asCategory)
+		assert: ({ 
+				 (3 -> (1 / 2)).
+				 (5 -> (1 / 4)).
+				 (9 -> (1 / 4)) } asProbabilityDistribution asCategory fmap: [ 
+				 :each | each negated ])
+		equals: { 
+				(-3 -> (1 / 2)).
+				(-5 -> (1 / 4)).
+				(-9 -> (1 / 4)) } asProbabilityDistribution asCategory
 ]
 
 { #category : #tests }
@@ -685,15 +687,45 @@ CTCategoryTest >> testMonadProb [
 
 	"[3,4,5] >>= \x -> [x,-x]"
 
-	self assert: self flipThree equals: (CTUniformRandomCategory on: { 
-				 (false -> (1 / 40)).
-				 (false -> (9 / 40)).
-				 (false -> (1 / 40)).
-				 (false -> (9 / 40)).
-				 (false -> (1 / 40)).
-				 (false -> (9 / 40)).
-				 (false -> (1 / 40)).
-				 (true -> (9 / 40)) } asCategory)
+	self assert: self flipThree equals: { 
+			(false -> (1 / 40)).
+			(false -> (9 / 40)).
+			(false -> (1 / 40)).
+			(false -> (9 / 40)).
+			(false -> (1 / 40)).
+			(false -> (9 / 40)).
+			(false -> (1 / 40)).
+			(true -> (9 / 40)) } asProbabilityDistribution asCategory
+]
+
+{ #category : #tests }
+CTCategoryTest >> testMonadProbJoin [
+
+	"
+thisSituation :: Prob (Prob Char)
+thisSituation = Prob
+    [(Prob [('a',1%2),('b',1%2)], 1%4)
+    ,(Prob [('c',1%2),('d',1%2)], 3%4)
+    ]
+	"
+
+	| aProbMonad |
+	aProbMonad := { 
+		              ({ 
+			               (#a -> (2 / 3)).
+			               (#b -> (1 / 3)) } asProbabilityDistribution
+			               asCategory -> (1 / 4)).
+		              ({ 
+			               (#c -> (5 / 7)).
+			               (#d -> (2 / 7)) } asProbabilityDistribution
+			               asCategory -> (3 / 4)) } asProbabilityDistribution
+		              asCategory.
+
+	self assert: aProbMonad join equals: { 
+			(#a -> (1 / 6)).
+			(#b -> (1 / 12)).
+			(#c -> (15 / 28)).
+			(#d -> (3 / 14)) } asProbabilityDistribution asCategory
 ]
 
 { #category : #tests }

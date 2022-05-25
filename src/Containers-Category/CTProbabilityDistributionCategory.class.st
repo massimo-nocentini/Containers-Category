@@ -1,5 +1,5 @@
 Class {
-	#name : #CTUniformRandomCategory,
+	#name : #CTProbabilityDistributionCategory,
 	#superclass : #CTCategory,
 	#traits : 'TCTMonadCategory',
 	#classTraits : 'TCTMonadCategory classTrait',
@@ -7,19 +7,19 @@ Class {
 }
 
 { #category : #monad }
-CTUniformRandomCategory >> >>= aBlock [
+CTProbabilityDistributionCategory >> >>= aBlock [
 
 	^ (self fmap: [ :each | aBlock cull: each cull: self ]) join
 ]
 
 { #category : #monad }
-CTUniformRandomCategory >> fail: aString [
+CTProbabilityDistributionCategory >> fail: aString [
 
-	^ self class on: {  } asCategory
+	^ {  } asProbabilityDistribution asCategory
 ]
 
 { #category : #functor }
-CTUniformRandomCategory >> fmap: aBlock [
+CTProbabilityDistributionCategory >> fmap: aBlock [
 
 	"
 instance Functor Prob where
@@ -31,7 +31,7 @@ instance Functor Prob where
 ]
 
 { #category : #splitjoin }
-CTUniformRandomCategory >> join [
+CTProbabilityDistributionCategory >> join [
 
 	| flatten |
 	flatten := self argument fmap: [ :anAssoc | 
@@ -45,7 +45,7 @@ CTUniformRandomCategory >> join [
 ]
 
 { #category : #monad }
-CTUniformRandomCategory >> return: anObject [
+CTProbabilityDistributionCategory >> return: anObject [
 
 	^ self class on: { (anObject -> 1) } asCategory
 ]

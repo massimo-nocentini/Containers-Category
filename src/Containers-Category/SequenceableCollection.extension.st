@@ -9,6 +9,14 @@ SequenceableCollection >> asDifferenceCollection [
 ]
 
 { #category : #'*Containers-Category' }
+SequenceableCollection >> asProbabilityDistribution [
+
+	^ CTCategoryProbabilityDistribution new
+		  object: self;
+		  yourself
+]
+
+{ #category : #'*Containers-Category' }
 SequenceableCollection >> powersetM [
 
 	"
