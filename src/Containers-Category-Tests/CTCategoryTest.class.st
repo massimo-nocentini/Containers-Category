@@ -1,5 +1,5 @@
 "
-A CTCategoryTest is a test class for testing the behavior of CTCategory
+A `CTCategoryTest` is a test class for testing the behavior of `CTCategory`
 "
 Class {
 	#name : #CTCategoryTest,

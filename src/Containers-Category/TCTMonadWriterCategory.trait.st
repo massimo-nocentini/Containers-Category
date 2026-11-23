@@ -1,4 +1,5 @@
 "
+```haskell
 class (Monoid w, Monad m) => MonadWriter w m | m -> w where
     {-# MINIMAL (writer | tell), listen, pass #-}
     -- | @'writer' (a,w)@ embeds a simple writer action.
@@ -18,6 +19,7 @@ class (Monoid w, Monad m) => MonadWriter w m | m -> w where
     -- returns a value and a function, and returns the value, applying
     -- the function to the output.
     pass   :: m (a, w -> w) -> m a
+```
 "
 Trait {
 	#name : #TCTMonadWriterCategory,
