@@ -8,7 +8,9 @@ I am the trait of applicative functors. My users implement `pure:`, which wraps 
 The receiver of `<*>` wraps the objects and its argument the blocks, the other way round than in Haskell:
 
 ```smalltalk
-({ 10. 20 } asCategory <*> ({ 1. 2 } asCategory <!> [ :i :j | i + j ])) argument ""#(11 21 12 22)""
+({ 10. 20 } asCategory
+	<*> ({ 1. 2 } asCategory <!> [ :i :j | i + j ]))
+	argument ""#(11 21 12 22)""
 ```
 "
 Trait {

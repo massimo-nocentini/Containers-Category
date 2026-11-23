@@ -2,10 +2,15 @@
 I am the baseline of `Containers-Category`: I load the packages `Containers-Category` and `Containers-Category-Tests`, and the project `Containers-Essentials` that they require.
 
 ```smalltalk
-Metacello new
+[ Metacello new
 	baseline: 'ContainersCategory';
-	repository: 'github://massimo-nocentini/Containers-Category:master/src';
-	load
+	githubUser: 'massimo-nocentini'
+		project: 'Containers-Category'
+		commitish: 'master'
+		path: 'src';
+	load ]
+		on: MCMergeOrLoadWarning
+		do: [ :warning | warning load ]
 ```
 "
 Class {

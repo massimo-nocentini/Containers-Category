@@ -3,7 +3,8 @@ I am the category of a difference collection: my `argument` is a block that prep
 
 ```smalltalk
 ({ 1. 2 } asDifferenceCollection asCategory
-	mappend: { 3 } asDifferenceCollection asCategory) asOrderedCollection ""#(1 2 3)""
+	mappend: { 3 } asDifferenceCollection asCategory)
+	asOrderedCollection ""#(1 2 3)""
 ```
 "
 Class {

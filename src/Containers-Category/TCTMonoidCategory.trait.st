@@ -3,7 +3,8 @@ I am the trait of monoids. My users implement `mappend:`, the operation, and `me
 
 ```smalltalk
 (CTSumNumberCategory new mconcat:
-	(#( 1 2 3 ) collect: [ :each | each asSumNumber asCategory ])) argument ""6""
+	(#( 1 2 3 ) collect: [ :each | each asSumNumber asCategory ]))
+	argument ""6""
 ```
 "
 Trait {

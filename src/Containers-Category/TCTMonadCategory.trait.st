@@ -8,7 +8,9 @@ I am the trait of monads, which are applicatives too: I implement `<*>` and `pur
 The block of `>>=` can have a second argument, a monad to send `return:` and the other messages to.
 
 ```smalltalk
-9 asJustMaybe asCategory >>= [ :x :category | category return: x * 10 ] ""a CTJustMaybeCategory(90)""
+9 asJustMaybe asCategory
+	>>= [ :x :category | category return: x * 10 ]
+	""a CTJustMaybeCategory(90)""
 ```
 
 I add `>>`, the bind that ignores what the receiver wraps, `join`, which flattens a monad of monads, and `guard:`, which answers a `return:` or a `fail:` according to a boolean.

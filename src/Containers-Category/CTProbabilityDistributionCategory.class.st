@@ -3,8 +3,10 @@ I am the monad of probability distributions. My `argument` is a `CTCollectionCat
 
 ```smalltalk
 | coin |
-coin := { (#head -> (1 / 2)). (#tail -> (1 / 2)) } asProbabilityDistribution asCategory.
-(coin >>= [ :a | coin >>= [ :b :cat | cat return: a = b ] ]) argument argument
+coin := { (#head -> (1 / 2)). (#tail -> (1 / 2)) }
+	asProbabilityDistribution asCategory.
+(coin >>= [ :a | coin >>= [ :b :cat | cat return: a = b ] ])
+	argument argument
 	""{true->(1/4). false->(1/4). false->(1/4). true->(1/4)}""
 ```
 
