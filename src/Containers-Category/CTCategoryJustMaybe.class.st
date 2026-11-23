@@ -1,3 +1,6 @@
+"
+I am what `asJustMaybe` answers: my `asCategory` answers a `CTJustMaybeCategory` on my object.
+"
 Class {
 	#name : #CTCategoryJustMaybe,
 	#superclass : #CTCategoryAsCategory,

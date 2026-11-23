@@ -1,3 +1,18 @@
+"
+I am the monad of probability distributions. My `argument` is a `CTCollectionCategory` of associations, from an object to its probability.
+
+```smalltalk
+| coin |
+coin := { (#head -> (1 / 2)). (#tail -> (1 / 2)) } asProbabilityDistribution asCategory.
+(coin >>= [ :a | coin >>= [ :b :cat | cat return: a = b ] ]) argument argument
+	""{true->(1/4). false->(1/4). false->(1/4). true->(1/4)}""
+```
+
+- `fmap:` evaluates its block with the objects and keeps the probabilities.
+- `join` flattens a distribution of distributions, by multiplying the probabilities. Equal objects are not collected together, as the example shows.
+- `return:` gives its object the probability 1.
+- `fail:` answers the empty distribution.
+"
 Class {
 	#name : #CTProbabilityDistributionCategory,
 	#superclass : #CTCategory,

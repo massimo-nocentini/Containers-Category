@@ -1,3 +1,13 @@
+"
+I am the baseline of `Containers-Category`: I load the packages `Containers-Category` and `Containers-Category-Tests`, and the project `Containers-Essentials` that they require.
+
+```smalltalk
+Metacello new
+	baseline: 'ContainersCategory';
+	repository: 'github://massimo-nocentini/Containers-Category:master/src';
+	load
+```
+"
 Class {
 	#name : #BaselineOfContainersCategory,
 	#superclass : #BaselineOf,

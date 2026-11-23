@@ -1,3 +1,6 @@
+"
+I am a `CTMaybeCategory` without an object: `>>=` answers me and leaves its block alone, and `mappend:` answers its argument.
+"
 Class {
 	#name : #CTNothingMaybeCategory,
 	#superclass : #CTMaybeCategory,

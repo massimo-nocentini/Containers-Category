@@ -1,3 +1,6 @@
+"
+I am what `asSumNumber` answers: my `asCategory` answers a `CTSumNumberCategory` on my number.
+"
 Class {
 	#name : #CTCategorySumNumber,
 	#superclass : #CTCategoryAsCategory,

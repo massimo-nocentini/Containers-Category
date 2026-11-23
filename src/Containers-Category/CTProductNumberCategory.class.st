@@ -1,3 +1,6 @@
+"
+I am the monoid of numbers by product: `mappend:` multiplies the two numbers and `mempty` is 1. Make me with `asProductNumber asCategory`.
+"
 Class {
 	#name : #CTProductNumberCategory,
 	#superclass : #CTNumberCategory,

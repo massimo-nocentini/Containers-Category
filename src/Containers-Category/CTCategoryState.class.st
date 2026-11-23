@@ -1,3 +1,6 @@
+"
+I am what `asState` answers: my `asCategory` answers a `CTStateCategory` on my block.
+"
 Class {
 	#name : #CTCategoryState,
 	#superclass : #CTCategoryAsCategory,

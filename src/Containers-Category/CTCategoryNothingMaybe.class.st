@@ -1,3 +1,6 @@
+"
+I am what `asNothingMaybe` answers: my `asCategory` answers a `CTNothingMaybeCategory` and leaves my object out.
+"
 Class {
 	#name : #CTCategoryNothingMaybe,
 	#superclass : #CTCategoryAsCategory,

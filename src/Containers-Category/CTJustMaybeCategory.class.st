@@ -1,3 +1,6 @@
+"
+I am a `CTMaybeCategory` with an object, my `argument`: `>>=` evaluates its block with it. `mappend:` with another just appends the two arguments, which have to understand `mappend:` themselves; with a nothing it answers me.
+"
 Class {
 	#name : #CTJustMaybeCategory,
 	#superclass : #CTMaybeCategory,

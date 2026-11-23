@@ -1,3 +1,12 @@
+"
+I am a pole for the tests of `CTMaybeCategory`: I count what lands on my `left` and on my `right`.
+
+`landLeft:` and `landRight:` answer a new pole. `maybeLandLeft:` and `maybeLandRight:` answer it as a just, or a nothing if the two counts would differ by 4 or more; `maybeBanana` always answers a nothing.
+
+```smalltalk
+(CTCategoryPole new maybeLandLeft: 2) >>= [ :pole | pole maybeLandRight: 6 ] ""a CTNothingMaybeCategory""
+```
+"
 Class {
 	#name : #CTCategoryPole,
 	#superclass : #Object,

@@ -1,3 +1,16 @@
+"
+I am the trait of applicative functors. My users implement `pure:`, which wraps an object, and `<*>`, which applies wrapped blocks to wrapped objects. From these come `fmap:` and:
+
+- `<!>`, an `fmap:` that first currifies its block, or its symbol;
+- `applicative:lift:`, which applies a block of two arguments to what two applicatives wrap;
+- `sequenceA:` and `sequenceAsequenceable:`, which turn a chain of links, or a sequenceable collection, of applicatives into an applicative of a chain or a collection.
+
+The receiver of `<*>` wraps the objects and its argument the blocks, the other way round than in Haskell:
+
+```smalltalk
+({ 10. 20 } asCategory <*> ({ 1. 2 } asCategory <!> [ :i :j | i + j ])) argument ""#(11 21 12 22)""
+```
+"
 Trait {
 	#name : #TCTApplicativeCategory,
 	#traits : 'TCTFunctorCategory',

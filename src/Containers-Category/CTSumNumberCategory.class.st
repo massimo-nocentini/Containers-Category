@@ -1,3 +1,6 @@
+"
+I am the monoid of numbers by sum: `mappend:` adds the two numbers and `mempty` is 0. Make me with `asSumNumber asCategory`.
+"
 Class {
 	#name : #CTSumNumberCategory,
 	#superclass : #CTNumberCategory,

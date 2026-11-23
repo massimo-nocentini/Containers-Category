@@ -1,3 +1,13 @@
+"
+I wrap an object, my `argument`, to give it the messages of the functors, applicatives, monads and monoids of Haskell. My subclasses get them from the traits `TCTFunctorCategory`, `TCTApplicativeCategory`, `TCTMonadCategory` and `TCTMonoidCategory`.
+
+```smalltalk
+({ 1. 2 } asCategory >>= [ :x | { x. x negated } asCategory ]) argument. ""#(1 -1 2 -2)""
+(3 asSumNumber asCategory mappend: 4 asSumNumber asCategory) argument. ""7""
+```
+
+Make an instance with `asCategory`, as `CTCategoryAsCategory` explains, with `on:`, or with `asWriterCategory:` for a `CTWriterCategory`. Two instances are equal when they have the same class and equal arguments.
+"
 Class {
 	#name : #CTCategory,
 	#superclass : #Object,
